@@ -41,9 +41,10 @@ class SubDomainToSubDomainController
   template<typename Iterator>
   bool incrementToNextValidEntity(Iterator& it) {
     while (it._hostIterator != it._hostEnd) {
-      if (it._gridView.indexSet().containsForSubDomain(_subDomain1,*it._hostIterator)) {
-        it._hostIntersectionIterator = it._hostGridView.ibegin(*it._hostIterator);
-        it._hostIntersectionEnd = it._hostGridView.iend(*it._hostIterator);
+      it._hostCell = *it._hostIterator;
+      if (it._gridView.indexSet().containsForSubDomain(_subDomain1,it._hostCell)) {
+        it._hostIntersectionIterator = it._hostGridView.ibegin(it._hostCell);
+        it._hostIntersectionEnd = it._hostGridView.iend(it._hostCell);
         return true;
       }
       ++it._hostIterator;
@@ -55,7 +56,7 @@ class SubDomainToSubDomainController
   void incrementToNextValidPosition(Iterator& it) {
     for (;;) {
       while(it._hostIntersectionIterator != it._hostIntersectionEnd) {
-        const auto& hostIntersection = *it._hostIntersectionIterator;
+        auto hostIntersection = *it._hostIntersectionIterator;
         if (hostIntersection.neighbor() && it._gridView.indexSet().containsForSubDomain(_subDomain2,hostIntersection.outside())) {
           return;
         }

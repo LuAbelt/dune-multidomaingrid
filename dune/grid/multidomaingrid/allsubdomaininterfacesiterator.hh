@@ -74,18 +74,21 @@ class AllInterfacesController
   bool incrementToNextValidIntersection(Iterator& it)
   {
     for (;;) {
-      do {
+      for (;;) {
         ++it._hostIntersectionIterator;
+        if (it._hostIntersectionIterator != it._hostIntersectionEnd)
+          break;
         if (it._hostIntersectionIterator->neighbor() &&
             calculateInterfacingSubDomains(it))
           return true;
-      } while (it._hostIntersectionIterator != it._hostIntersectionEnd);
+      }
       ++it._hostIterator;
       if (it._hostIterator == it._hostEnd)
         return false;
-      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(*it._hostIterator);
-      it._hostIntersectionIterator = it._hostGridView.ibegin(*it._hostIterator);
-      it._hostIntersectionEnd = it._hostGridView.iend(*it._hostIterator);
+      it._hostCell = *it._hostIterator;
+      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(it._hostCell);
+      it._hostIntersectionIterator = it._hostGridView.ibegin(it._hostCell);
+      it._hostIntersectionEnd = it._hostGridView.iend(it._hostCell);
       if (it._hostIntersectionIterator->neighbor() &&
           calculateInterfacingSubDomains(it))
         return true;
@@ -102,7 +105,8 @@ class AllInterfacesController
   void incrementToStartPosition(Iterator& it)
   {
     if (it._hostIterator != it._hostEnd) {
-      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(*it._hostIterator);
+      it._hostCell = *it._hostIterator;
+      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(it._hostCell);
       if (!it._hostIntersectionIterator->neighbor() || !calculateInterfacingSubDomains(it))
         incrementToNextValidIntersection(it);
     }
