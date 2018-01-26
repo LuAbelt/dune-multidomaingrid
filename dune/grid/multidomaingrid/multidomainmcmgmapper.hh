@@ -8,12 +8,6 @@
 #include <dune/grid/common/mcmgmapper.hh>
 #include <dune/geometry/referenceelements.hh>
 
-/**
- * @file
- * @brief  Mapper for multiple codim and multiple geometry types
- * @author Peter Bastian
- */
-
 namespace Dune {
 
 namespace mdgrid {
@@ -88,13 +82,13 @@ namespace {
  * If you don't want to use the default constructor of the LayoutClass you can construct it yourself
  * and hand it to the respective constructor.
  */
-template <typename GV, template<int> class Layout>
-class MultiDomainMCMGMapper : public MultipleCodimMultipleGeomTypeMapper<GV,Layout >,
+template <typename GV>
+class MultiDomainMCMGMapper : public MultipleCodimMultipleGeomTypeMapper<GV>,
                               public MCMGMapperStorageProvider<GV,GV::Grid::maxSubDomainIndexIsStatic()>
 
 {
 
-  typedef MultipleCodimMultipleGeomTypeMapper<GV,Layout > Base;
+  typedef MultipleCodimMultipleGeomTypeMapper<GV> Base;
 
   typedef MCMGMapperStorageProvider<GV,GV::Grid::maxSubDomainIndexIsStatic()> StorageProvider;
 
@@ -105,11 +99,10 @@ public:
   typedef typename GV::IndexSet::IndexType IndexType;
   typedef typename GV::Grid::SubDomainIndex SubDomainIndex;
 
-  MultiDomainMCMGMapper (const GV& gridView, const Layout<GV::dimension> layout)
+  MultiDomainMCMGMapper (const GV& gridView, const MCMGLayout& layout)
     : Base(gridView,layout)
     , StorageProvider(gridView)
     , _gv(gridView)
-    , _layout(layout)
   {
     update();
   }
@@ -174,7 +167,7 @@ public:
   template<class EntityType>
   bool contains (SubDomainIndex subDomain, const EntityType& e, IndexType& result) const
   {
-    if(!_gv.indexSet().contains(subDomain,e) || !_layout.contains(e.type()))
+    if(!_gv.indexSet().contains(subDomain,e) || !Base::layout()(e.type(),GV::dimension))
       {
         result = 0;
         return false;
@@ -195,7 +188,7 @@ public:
   {
     GeometryType gt = ReferenceElements<double,GV::dimension>::general(e.type()).type(i,cc);
     // if the entity is contained in the subdomain, all of its subentities are contained as well
-    if(!_gv.indexSet().contains(subDomain,e) || !_layout.contains(gt))
+    if(!_gv.indexSet().contains(subDomain,e) || !Base::layout()(gt,GV::dimension))
       {
         result = 0;
         return false;
@@ -230,108 +223,7 @@ public:
 
 private:
   GV _gv;
-  mutable Layout<GV::dimension> _layout; // get layout object
 };
-
-#if 0
-
-/** @brief Multiple codim and multiple geometry type mapper for leaf entities.
-
-    This mapper uses all leaf entities of a certain codimension as its entity set.
-
-    Template parameters are:
-
-    \par G
-    A %Dune grid type.
-    \par Layout
-    A helper class with a method contains(), that returns true for all geometry
-    types that are in the domain of the map.  The class should be of the following
-    shape
-    \code
-    template<int dim>
-    struct LayoutClass {
-    bool contains (Dune::GeometryType gt) {
-    // Return true if gt is in the domain of the map
-    }
-    };
-    \endcode
-*/
-
-template <typename G, template<int> class Layout>
-class LeafMultipleCodimMultipleGeomTypeMapper
-  : public MultipleCodimMultipleGeomTypeMapper<typename G::LeafGridView,Layout>
-{
-public:
-  /** @brief The constructor
-      @param grid A reference to a grid.
-  */
-  LeafMultipleCodimMultipleGeomTypeMapper (const G& grid)
-    : MultipleCodimMultipleGeomTypeMapper<typename G::LeafGridView,Layout>(grid.leafGridView())
-  {}
-
-  /** @brief The constructor
-   *
-   * Use this constructor to provide a custom layout object e.g. not
-   * using the default constructor.
-   *
-   * @param grid A reference to a grid.
-   * @param layout A layout object
-   */
-  LeafMultipleCodimMultipleGeomTypeMapper (const G& grid, const Layout<G::dimension> layout)
-    : MultipleCodimMultipleGeomTypeMapper<typename G::Traits::LeafIndexSet,Layout>(grid,grid.leafIndexSet(),layout)
-  {}
-
-};
-
-/** @brief Multiple codim and multiple geometry type mapper for entities of one level.
-
-
-    This mapper uses all entities of a certain codimension on a given level as its entity set.
-
-    Template parameters are:
-
-    \par G
-    A %Dune grid type.
-    \par Layout
-    A helper class with a method contains(), that returns true for all geometry
-    types that are in the domain of the map.  The class should be of the following
-    shape
-    \code
-    template<int dim>
-    struct LayoutClass {
-    bool contains (Dune::GeometryType gt) {
-    // Return true if gt is in the domain of the map
-    }
-    };
-    \endcode
-*/
-template <typename G, template<int> class Layout>
-class LevelMultipleCodimMultipleGeomTypeMapper
-  : public MultipleCodimMultipleGeomTypeMapper<typename G::LevelGridView,Layout> {
-public:
-  /** @brief The constructor
-      @param grid A reference to a grid.
-      @param level A valid level of the grid.
-  */
-  LevelMultipleCodimMultipleGeomTypeMapper (const G& grid, int level)
-    : MultipleCodimMultipleGeomTypeMapper<typename G::LevelGridView,Layout>(grid.levelGridView(level))
-  {}
-
-  /** @brief The constructor
-   *
-   * Use this constructor to provide a custom layout object e.g. not
-   * using the default constructor.
-   *
-   * @param grid A reference to a grid.
-   * @param layout A layout object
-   */
-  LevelMultipleCodimMultipleGeomTypeMapper (const G& grid, int level, const Layout<G::dimension> layout)
-    : MultipleCodimMultipleGeomTypeMapper<typename G::Traits::LevekIndexSet,Layout>(grid,grid.levelIndexSet(level),layout)
-  {}
-
-};
-
-#endif
 
 /** @} */
 
