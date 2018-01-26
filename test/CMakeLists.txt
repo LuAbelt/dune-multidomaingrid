@@ -54,7 +54,7 @@ dune_add_test(
   SOURCES testparallel
   MPI_RANKS 2
   TIMEOUT 10
-  CMD_ARGS 5 1
+  CMD_ARGS 16 2
   )
 
 dune_add_test(SOURCES testpartitioning)
