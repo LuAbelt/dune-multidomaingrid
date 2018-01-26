@@ -82,10 +82,6 @@ public:
     return _mdIndexSet.subIndex(_grid.domain(),_grid.multiDomainEntity(e),i,codim);
   }
 
-  const std::vector<GeometryType>& geomTypes(int codim) const {
-    return _mdIndexSet.geomTypesForSubDomain(_grid.domain(),codim);
-  }
-
   Types types(int codim) const {
     return _mdIndexSet.types(_grid.domain(),codim);
   }

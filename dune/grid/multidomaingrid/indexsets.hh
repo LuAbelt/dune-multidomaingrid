@@ -386,11 +386,6 @@ public:
     return r;
   }
 
-  //! Returns a list of all geometry types with codimension codim contained in the grid.
-  const std::vector<GeometryType>& DUNE_DEPRECATED_MSG("Use types() instead") geomTypes(int codim) const {
-    return _hostGridView.indexSet().geomTypes(codim);
-  }
-
     //! Returns a list of all geometry types with codimension codim contained in the grid.
   Types types(int codim) const {
     return _hostGridView.indexSet().types(codim);
@@ -535,12 +530,6 @@ private:
                                    *this).dispatch(codim);
   }
 
-  const std::vector<GeometryType>&
-  DUNE_DEPRECATED_MSG("Use typesForSubDomain() instead")
-  geomTypesForSubDomain(SubDomainIndex subDomain, int codim) const {
-    return geomTypes(codim);
-  }
-
   Types typesForSubDomain(SubDomainIndex subDomain, int codim) const {
     return types(codim);
   }
@@ -611,10 +600,6 @@ public:
 
   IndexType subIndex(SubDomainIndex subDomain, const typename remove_const<GridImp>::type::Traits::template Codim<0>::Entity& e, int i, int codim) const {
     return subIndexForSubDomain(subDomain,_grid.hostEntity(e),i,codim);
-  }
-
-  const std::vector<GeometryType>& DUNE_DEPRECATED_MSG("Use types() instead") geomTypes(SubDomainIndex subDomain, int codim) const {
-    return geomTypes(codim);
   }
 
   Types types(SubDomainIndex subDomain, int codim) const {
