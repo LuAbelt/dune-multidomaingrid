@@ -72,7 +72,7 @@ namespace sds_detail {
 
     static_assert(std::numeric_limits<typename candidate::type>::is_specialized,"numeric_limits<> lacks specialization");
 
-    typedef typename conditional<capacity <= static_cast<std::size_t>(std::numeric_limits<typename candidate::type>::digits),
+    typedef typename std::conditional<capacity <= static_cast<std::size_t>(std::numeric_limits<typename candidate::type>::digits),
                                  typename candidate::type,
                                  typename SetStorageTester<capacity,
                                                            typename candidate::next_candidate

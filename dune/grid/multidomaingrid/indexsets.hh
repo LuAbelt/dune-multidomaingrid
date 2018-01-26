@@ -234,6 +234,8 @@ class IndexSetWrapper :
                           typename HostGridViewType::IndexSet::Types>
 {
 
+  using Grid = std::remove_const_t<GridImp>;
+
   template<typename, typename>
   friend class IndexSetWrapper;
 
@@ -254,10 +256,11 @@ class IndexSetWrapper :
 
   typedef IndexSetWrapper<GridImp,HostGridViewType> ThisType;
 
-  typedef typename remove_const<GridImp>::type::HostGrid HostGrid;
+  using HostGrid = typename Grid::HostGrid;
   typedef HostGridViewType HostGridView;
   typedef typename HostGridView::IndexSet HostIndexSet;
-  typedef typename remove_const<GridImp>::type::ctype ctype;
+  using ctype = typename Grid::ctype;
+  using CellReferenceElement = Dune::ReferenceElement<typename HostGrid::template Codim<0>::Entity::Geometry>;
 
   typedef Dune::IndexSet<
     GridImp,
@@ -273,21 +276,20 @@ public:
 
   typedef typename BaseT::Types Types;
 
-  typedef typename remove_const<GridImp>::type::MDGridTraits MDGridTraits;
+  using MDGridTraits = typename Grid::MDGridTraits;
   typedef typename MDGridTraits::template Codim<0>::SubDomainSet SubDomainSet;
   typedef typename MDGridTraits::SubDomainIndex SubDomainIndex;
 
 
   typedef typename HostIndexSet::IndexType IndexType;
-  static const int dimension = remove_const<GridImp>::type::dimension;
+  static const int dimension = Grid::dimension;
   static const std::size_t maxSubDomains = SubDomainSet::maxSize;
 
 private:
 
   typedef typename HostGridView::template Codim<0>::Iterator HostEntityIterator;
   typedef typename HostGridView::template Codim<0>::Entity HostEntity;
-  typedef typename HostGridView::template Codim<0>::EntityPointer HostEntityPointer;
-  typedef typename remove_const<GridImp>::type::Traits::template Codim<0>::Entity Codim0Entity;
+  using Codim0Entity = typename Grid::Traits::template Codim<0>::Entity;
 
   template<int cc>
   struct MapEntry {
@@ -304,29 +306,33 @@ private:
   template<int codim>
   struct Containers {
 
-    static const bool supported = remove_const<GridImp>::type::MDGridTraits::template Codim<codim>::supported;
+    static const bool supported = Grid::MDGridTraits::template Codim<codim>::supported;
 
     static_assert((codim > 0 || supported), "index mapping of codimension 0 must be supported!");
 
-    typedef typename conditional<supported,
-                                 std::vector<std::vector<MapEntry<codim> > >,
-                                 NotSupported
-                                 >::type IndexMap;
+    using IndexMap = std::conditional_t<
+      supported,
+      std::vector<std::vector<MapEntry<codim> > >,
+      NotSupported
+      >;
 
-    typedef typename conditional<supported,
-                                 std::vector<typename remove_const<GridImp>::type::MDGridTraits::template Codim<codim>::SizeContainer>,
-                                 NotSupported
-                                 >::type SizeMap;
+    using SizeMap = std::conditional_t<
+      supported,
+      std::vector<typename Grid::MDGridTraits::template Codim<codim>::SizeContainer>,
+      NotSupported
+      >;
 
-    typedef typename conditional<supported,
-                                 typename remove_const<GridImp>::type::MDGridTraits::template Codim<codim>::SizeContainer,
-                                 NotSupported
-                                 >::type CodimSizeMap;
+    using CodimSizeMap = std::conditional_t<
+      supported,
+      typename Grid::MDGridTraits::template Codim<codim>::SizeContainer,
+      NotSupported
+      >;
 
-    typedef typename conditional<supported,
-                                 std::vector<typename remove_const<GridImp>::type::MDGridTraits::template Codim<codim>::MultiIndexContainer>,
-                                 NotSupported
-                                 >::type MultiIndexMap;
+    using MultiIndexMap = std::conditional_t<
+      supported,
+      std::vector<typename Grid::MDGridTraits::template Codim<codim>::MultiIndexContainer>,
+      NotSupported
+      >;
 
     IndexMap indexMap;
     SizeMap sizeMap;
@@ -358,7 +364,7 @@ public:
 
   //! Returns the index of the entity with codimension codim.
   template<int codim>
-  IndexType index(const typename remove_const<GridImp>::type::Traits::template Codim<codim>::Entity& e) const {
+  IndexType index(const typename Grid::Traits::template Codim<codim>::Entity& e) const {
     return _hostGridView.indexSet().index(_grid.hostEntity(e));
   }
 
@@ -415,7 +421,7 @@ public:
   //! Returns a constant reference to the SubDomainSet of the given entity with codimension cc.
   //! \tparam cc the codimension of the entity.
   template<int cc>
-  const typename MapEntry<cc>::SubDomainSet& subDomains(const typename remove_const<GridImp>::type::Traits::template Codim<cc>::Entity& e) const {
+  const typename MapEntry<cc>::SubDomainSet& subDomains(const typename Grid::Traits::template Codim<cc>::Entity& e) const {
     return subDomainsForHostEntity<cc>(_grid.hostEntity(e));
   }
 
@@ -428,7 +434,7 @@ public:
   //! Returns the index of the entity with codimension cc in a specific subdomain.
   //! \tparam the codimension of the entity.
   template<int cc>
-  IndexType index(SubDomainIndex subDomain, const typename remove_const<GridImp>::type::Traits::template Codim<cc>::Entity& e) const {
+  IndexType index(SubDomainIndex subDomain, const typename Grid::Traits::template Codim<cc>::Entity& e) const {
     GeometryType gt = e.type();
     IndexType hostIndex = _hostGridView.indexSet().index(_grid.hostEntity(e));
     const MapEntry<cc>& me = indexMap<cc>()[LocalGeometryTypeIndex::index(gt)][hostIndex];
@@ -451,7 +457,7 @@ private:
   //! Returns a mutable reference to the SubDomainSet of the given entity with codimension cc.
   //! \tparam cc the codimension of the entity.
   template<int cc>
-  typename MapEntry<cc>::SubDomainSet& subDomains(const typename remove_const<GridImp>::type::Traits::template Codim<cc>::Entity& e) {
+  typename MapEntry<cc>::SubDomainSet& subDomains(const typename Grid::Traits::template Codim<cc>::Entity& e) {
     return subDomainsForHostEntity<cc>(_grid.hostEntity(e));
   }
 
@@ -464,7 +470,7 @@ private:
   //! Returns a mutable reference to the SubDomainSet of the given entity with codimension cc.
   //! \tparam cc the codimension of the entity.
   template<int cc>
-  typename MapEntry<cc>::SubDomainSet& subDomainsForHostEntity(const typename remove_const<GridImp>::type::HostGrid::Traits::template Codim<cc>::Entity& he) {
+  typename MapEntry<cc>::SubDomainSet& subDomainsForHostEntity(const typename Grid::HostGrid::Traits::template Codim<cc>::Entity& he) {
     return indexMap<cc>()[LocalGeometryTypeIndex::index(he.type())][_hostGridView.indexSet().index(he)].domains;
   }
 
@@ -477,12 +483,12 @@ private:
   //! Returns a constant reference to the SubDomainSet of the given entity with codimension cc.
   //! \tparam cc the codimension of the entity.
   template<int cc>
-  const typename MapEntry<cc>::SubDomainSet& subDomainsForHostEntity(const typename remove_const<GridImp>::type::HostGrid::Traits::template Codim<cc>::Entity& he) const {
+  const typename MapEntry<cc>::SubDomainSet& subDomainsForHostEntity(const typename Grid::HostGrid::Traits::template Codim<cc>::Entity& he) const {
     return indexMap<cc>()[LocalGeometryTypeIndex::index(he.type())][_hostGridView.indexSet().index(he)].domains;
   }
 
   template<int cc>
-  IndexType indexForSubDomain(SubDomainIndex subDomain, const typename remove_const<GridImp>::type::HostGrid::Traits::template Codim<cc>::Entity& he) const {
+  IndexType indexForSubDomain(SubDomainIndex subDomain, const typename Grid::HostGrid::Traits::template Codim<cc>::Entity& he) const {
     const GeometryType gt = he.type();
     const IndexType hostIndex = _hostGridView.indexSet().index(he);
     const MapEntry<cc>& me = indexMap<cc>()[LocalGeometryTypeIndex::index(gt)][hostIndex];

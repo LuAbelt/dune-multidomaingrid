@@ -2,6 +2,7 @@
 #define DUNE_MULTIDOMAINGRID_MDGRIDTRAITS_HH
 
 #include <vector>
+#include <type_traits>
 
 #include <dune/grid/multidomaingrid/subdomainset.hh>
 #include <dune/grid/multidomaingrid/arraybasedset.hh>
@@ -55,7 +56,7 @@ struct ArrayBasedTraits {
   };
 
   template<int codim>
-  struct Codim : public conditional<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase>::type {
+  struct Codim : public std::conditional_t<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase> {
     static const bool supported = supportedCodims<dim,codim>::supported;
   };
 
@@ -111,7 +112,7 @@ struct DynamicSubDomainCountTraits {
   };
 
   template<int codim>
-  struct Codim : public conditional<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase>::type {
+  struct Codim : public std::conditional_t<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase> {
     static const bool supported = supportedCodims<dim,codim>::supported;
   };
 
@@ -166,7 +167,7 @@ struct FewSubDomainsTraits {
   };
 
   template<int codim>
-  struct Codim : public conditional<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase>::type {
+  struct Codim : public std::conditional_t<supportedCodims<dim,codim>::supported,CodimBase<codim>,EmptyCodimBase> {
     static const bool supported = supportedCodims<dim,codim>::supported;
   };
 
