@@ -255,10 +255,8 @@ class SubDomainGrid :
 public:
 
   using MultiDomainGrid = MDGrid;
-  using MDGridType DUNE_DEPRECATED_MSG("Deprecated in 2.4, Use MultiDomainGrid instead") = MultiDomainGrid;
 
   using HostGrid = typename MDGrid::HostGrid;
-  using HostGridType DUNE_DEPRECATED_MSG("Deprecated in 2.4, Use HostGrid instead") = HostGrid;
 
 private:
 

@@ -44,8 +44,8 @@ class IndexSetWrapper :
 
   typedef IndexSetWrapper<GridImp,MDIndexSet> ThisType;
 
-  using HostGrid = typename std::remove_const_t<GridImp>::HostGridType;
-  using MDGrid   = typename std::remove_const_t<GridImp>::MDGridType;
+  using HostGrid = typename std::remove_const_t<GridImp>::HostGrid;
+  using MDGrid   = typename std::remove_const_t<GridImp>::MultiDomainGrid;
   using ctype    = typename std::remove_const_t<GridImp>::ctype;
 
 public:

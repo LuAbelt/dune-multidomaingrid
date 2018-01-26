@@ -244,8 +244,6 @@ public:
 
   using HostGrid = HostGrid_;
 
-  using HostGridType DUNE_DEPRECATED_MSG("Deprecated in 2.4, use HostGrid instead") = HostGrid;
-
 private:
 
 

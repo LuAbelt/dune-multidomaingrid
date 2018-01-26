@@ -8,7 +8,7 @@ namespace detail {
   template<typename GridImp>
   struct HostGridAccessor {
     typedef typename GridImp::HostGrid::Traits Traits;
-    typedef typename GridImp::HostGridType Type;
+    typedef typename GridImp::HostGrid Type;
   };
 
 } // end namespace detail
