@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.1.0)
 project(dune-multidomaingrid CXX)
 
 if(NOT (dune-common_DIR OR dune-common_ROOT OR
@@ -38,7 +38,6 @@ set(DUNE_TEST_MAGIC OFF)
 
 add_subdirectory("doc")
 add_subdirectory("dune")
-add_subdirectory("m4")
 add_subdirectory("test")
 
 # finalize the dune project, e.g. generating config.h etc.
