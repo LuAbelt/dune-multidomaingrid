@@ -16,10 +16,10 @@ template<typename GridImp,
          typename IterationController>
 class SubDomainInterfaceIterator;
 
-template<typename SI, typename HostCell>
+template<typename SI>
 class SubDomainToSubDomainController;
 
-template<typename SubDomainSet, typename HostCell>
+template<typename SubDomainSet>
 class AllInterfacesController;
 
 
@@ -47,10 +47,10 @@ private:
   typedef FieldVector<ctype,dimensionworld> GlobalCoords;
   typedef FieldVector<ctype,dimension - 1> LocalCoords;
 
-  template<typename,typename>
+  template<typename>
   friend class SubDomainToSubDomainController;
 
-  template<typename,typename>
+  template<typename>
   friend class AllInterfacesController;
 
   template<typename, typename, typename, typename>

@@ -248,10 +248,10 @@ class IndexSetWrapper :
   template<typename, typename, typename, typename>
   friend class SubDomainInterface;
 
-  template<typename,typename>
+  template<typename>
   friend class SubDomainToSubDomainController;
 
-  template<typename,typename>
+  template<typename>
   friend class AllInterfacesController;
 
   typedef IndexSetWrapper<GridImp,HostGridViewType> ThisType;
