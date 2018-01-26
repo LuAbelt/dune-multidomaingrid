@@ -154,12 +154,12 @@ public:
   /** @name SubDomainInterface-specific interface methods */
   /*@{*/
 
-  //! Returns an EntityPointer to the corresponding cell in the first subdomain.
+  //! Returns the entity of the corresponding cell in the first subdomain.
   Entity firstCell() const {
     return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->inside());
   }
 
-  //! Returns an EntityPointer to the corresponding cell in the second subdomain.
+  //! Returns the entity of the corresponding cell in the second subdomain.
   Entity secondCell() const {
     return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->outside());
   }
@@ -235,12 +235,12 @@ public:
   /** @name Stardard Dune Intersection interface methods */
   /*@{*/
 
-  //! Returns an EntityPointer to the corresponding cell in the first subdomain.
+  //! Returns the  entity of the corresponding cell in the first subdomain.
   Entity inside() const {
     return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->inside());
   }
 
-  //! Returns an EntityPointer to the corresponding cell in the second subdomain.
+  //! Returns the entity of the corresponding cell in the second subdomain.
   Entity outside() const {
     return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->outside());
   }
