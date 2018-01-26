@@ -74,12 +74,14 @@ class AllInterfacesController
   bool incrementToNextValidIntersection(Iterator& it)
   {
     for (;;) {
-      do {
+      for (;;) {
         ++it._hostIntersectionIterator;
+        if (it._hostIntersectionIterator != it._hostIntersectionEnd)
+          break;
         if (it._hostIntersectionIterator->neighbor() &&
             calculateInterfacingSubDomains(it))
           return true;
-      } while (it._hostIntersectionIterator != it._hostIntersectionEnd);
+      }
       ++it._hostIterator;
       if (it._hostIterator == it._hostEnd)
         return false;
