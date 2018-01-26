@@ -375,13 +375,14 @@ public:
   }
 
   //! Returns the subdindex of the i-th subentity of e with codimension codim.
-  template<int codim>
-  IndexType subIndex(const Codim0Entity& e, int i) const {
+  template<int codim, typename Entity>
+  IndexType subIndex(const Entity& e, int i) const {
     return _hostGridView.indexSet().subIndex(_grid.hostEntity(e),i,codim);
   }
 
   //! Returns the subdindex of the i-th subentity of e with codimension codim.
-  IndexType subIndex(const Codim0Entity& e, int i, unsigned int codim) const {
+  template<typename Entity>
+  IndexType subIndex(const Entity& e, int i, unsigned int codim) const {
     IndexType r = _hostGridView.indexSet().subIndex(_grid.hostEntity(e),i,codim);
     return r;
   }
@@ -523,9 +524,10 @@ private:
 
   };
 
-  IndexType subIndexForSubDomain(SubDomainIndex subDomain, const typename remove_const<GridImp>::type::HostGrid::Traits::template Codim<0>::Entity& he, int i, int codim) const {
+  template<typename HostEntity>
+  IndexType subIndexForSubDomain(SubDomainIndex subDomain, const HostEntity& he, int i, int codim) const {
     return getSubIndexForSubDomain(subDomain,
-                                   ReferenceElements<ctype,dimension>::general(he.type()).type(i,codim),
+                                   referenceElement(he.geometry()).type(i,codim - he.codimension),
                                    _hostGridView.indexSet().subIndex(he,i,codim),
                                    *this).dispatch(codim);
   }
@@ -598,7 +600,8 @@ private:
 
 public:
 
-  IndexType subIndex(SubDomainIndex subDomain, const typename remove_const<GridImp>::type::Traits::template Codim<0>::Entity& e, int i, int codim) const {
+  template<typename SubDomainEntity>
+  IndexType subIndex(SubDomainIndex subDomain, const SubDomainEntity& e, int i, int codim) const {
     return subIndexForSubDomain(subDomain,_grid.hostEntity(e),i,codim);
   }
 
