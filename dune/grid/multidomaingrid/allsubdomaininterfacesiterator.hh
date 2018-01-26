@@ -16,7 +16,7 @@ class LeafAllSubDomainInterfacesIterator;
 template<typename GridImp>
 class LevelAllSubDomainInterfacesIterator;
 
-template<typename SubDomainSet>
+template<typename SubDomainSet, typename HostCell>
 class AllInterfacesController
 {
 
@@ -46,7 +46,7 @@ class AllInterfacesController
   template<typename Iterator>
   bool calculateInterfacingSubDomains(Iterator& it)
   {
-    const typename Iterator::HostIntersectionIterator::Intersection::Entity outside = it._hostIntersectionIterator->outside();
+    HostCell outside = it._hostIntersectionIterator->outside();
     const SubDomainSet& subDomains2 = it._gridView.indexSet().subDomainsForHostEntity(outside);
     _interfacingSubDomains1.difference(*_subDomains1,subDomains2);
     _interfacingSubDomains2.difference(subDomains2,*_subDomains1);
@@ -83,9 +83,10 @@ class AllInterfacesController
       ++it._hostIterator;
       if (it._hostIterator == it._hostEnd)
         return false;
-      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(*it._hostIterator);
-      it._hostIntersectionIterator = it._hostGridView.ibegin(*it._hostIterator);
-      it._hostIntersectionEnd = it._hostGridView.iend(*it._hostIterator);
+      _hostCell = *it._hostIterator;
+      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(_hostCell);
+      it._hostIntersectionIterator = it._hostGridView.ibegin(_hostCell);
+      it._hostIntersectionEnd = it._hostGridView.iend(_hostCell);
       if (it._hostIntersectionIterator->neighbor() &&
           calculateInterfacingSubDomains(it))
         return true;
@@ -102,7 +103,8 @@ class AllInterfacesController
   void incrementToStartPosition(Iterator& it)
   {
     if (it._hostIterator != it._hostEnd) {
-      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(*it._hostIterator);
+      _hostCell = *it._hostIterator;
+      _subDomains1 = &it._gridView.indexSet().subDomainsForHostEntity(_hostCell);
       if (!it._hostIntersectionIterator->neighbor() || !calculateInterfacingSubDomains(it))
         incrementToNextValidIntersection(it);
     }
@@ -132,6 +134,7 @@ class AllInterfacesController
   SubDomainIterator _subDomain2Iterator;
   SubDomainIterator _subDomain1End;
   SubDomainIterator _subDomain2End;
+  HostCell _hostCell;
 };
 
 
@@ -140,7 +143,7 @@ class LeafAllSubDomainInterfacesIterator :
     public SubDomainInterfaceIterator<GridImp,
                                       typename GridImp::LeafGridView,
                                       typename detail::HostGridAccessor<GridImp>::Type::LeafGridView,
-                                      AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet>
+                                      AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity>
                                       >
 {
 
@@ -153,7 +156,10 @@ class LeafAllSubDomainInterfacesIterator :
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  typedef AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet> Controller;
+  using HostGridView = typename detail::HostGridAccessor<GridImp>::Type::LeafGridView;
+  using HostCell     = typename HostGridView::template Codim<0>::Entity;
+
+  typedef AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet,HostCell> Controller;
 
   typedef SubDomainInterfaceIterator<GridImp,
                                      typename GridImp::LeafGridView,
@@ -173,7 +179,7 @@ class LevelAllSubDomainInterfacesIterator :
     public SubDomainInterfaceIterator<GridImp,
                                       typename GridImp::LevelGridView,
                                       typename detail::HostGridAccessor<GridImp>::Type::LevelGridView,
-                                      AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet>
+                                      AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity>
                                       >
 {
 
@@ -186,7 +192,10 @@ class LevelAllSubDomainInterfacesIterator :
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  typedef AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet> Controller;
+  using HostGridView = typename detail::HostGridAccessor<GridImp>::Type::LevelGridView;
+  using HostCell     = typename HostGridView::template Codim<0>::Entity;
+
+  typedef AllInterfacesController<typename GridImp::MDGridTraits::template Codim<0>::SubDomainSet,HostCell> Controller;
 
   typedef SubDomainInterfaceIterator<GridImp,
                                      typename GridImp::LevelGridView,
