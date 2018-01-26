@@ -830,7 +830,8 @@ private:
     typename Containers<0>::IndexMap& im = indexMap<0>();
     typename Containers<0>::SizeMap& sm = sizeMap<0>();
     for (const auto& he : elements(_hostGridView)) {
-      const GeometryType hgt = he.type();
+      auto geo = he.geometry();
+      auto hgt = geo.type();
       const auto hgt_index = LocalGeometryTypeIndex::index(hgt);
       IndexType hostIndex = his.index(he);
       MapEntry<0>& me = im[hgt_index][hostIndex];
@@ -840,7 +841,7 @@ private:
         markAncestors(levelIndexSets,he,me.domains);
       }
       updateMapEntry(me,sm[hgt_index],multiIndexMap<0>());
-      applyToCodims(markSubIndices(he,me.domains,his,ReferenceElements<ctype,dimension>::general(hgt)));
+      applyToCodims(markSubIndices(he,me.domains,his,geo));
     }
 
     propagateBorderEntitySubDomains();
@@ -861,12 +862,13 @@ private:
     communicateSubDomainSelection();
 
     for (const auto& he : elements(_hostGridView)) {
-      const GeometryType hgt = he.type();
+      auto geo = he.geometry();
+      const GeometryType hgt = geo.type();
       const auto hgt_index = LocalGeometryTypeIndex::index(hgt);
       IndexType hostIndex = his.index(he);
       MapEntry<0>& me = im[hgt_index][hostIndex];
       updateMapEntry(me,sm[hgt_index],multiIndexMap<0>());
-      applyToCodims(markSubIndices(he,me.domains,his,ReferenceElements<ctype,dimension>::general(hgt)));
+      applyToCodims(markSubIndices(he,me.domains,his,geo));
     }
 
     propagateBorderEntitySubDomains();
@@ -924,13 +926,13 @@ private:
     const HostEntity& _he;
     DomainSet& _domains;
     const HostIndexSet& _his;
-    const ReferenceElement<ctype,dimension>& _refEl;
+    CellReferenceElement _refEl;
 
-    markSubIndices(const HostEntity& he, DomainSet& domains, const HostIndexSet& his, const ReferenceElement<ctype,dimension>& refEl) :
+    markSubIndices(const HostEntity& he, DomainSet& domains, const HostIndexSet& his, const typename HostEntity::Geometry& geo) :
       _he(he),
       _domains(domains),
       _his(his),
-      _refEl(refEl)
+      _refEl(referenceElement(geo))
     {}
 
   };
