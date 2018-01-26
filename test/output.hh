@@ -18,7 +18,7 @@ struct AllLayout
 template<typename GridView, typename InterfaceIterator>
 void vtkOut(GridView gv,std::string filename, InterfaceIterator iit, InterfaceIterator iend) {
 
-    Dune::MultiDomainMCMGMapper<GridView,AllLayout> mapper(gv);
+    Dune::MultiDomainMCMGMapper<GridView> mapper(gv,[](Dune::GeometryType,int) { return true; });
 
     std::vector<int> hcid(gv.indexSet().size(0),0);
     std::vector<int> sdc0(gv.indexSet().size(0),0);
