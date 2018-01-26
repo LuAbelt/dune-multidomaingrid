@@ -14,7 +14,7 @@ class LeafSubDomainInterfaceIterator;
 template<typename GridImp>
 class LevelSubDomainInterfaceIterator;
 
-template<typename SubDomainIndex, typename HostCell>
+template<typename SubDomainIndex>
 class SubDomainToSubDomainController
 {
 
@@ -41,10 +41,9 @@ class SubDomainToSubDomainController
   template<typename Iterator>
   bool incrementToNextValidEntity(Iterator& it) {
     while (it._hostIterator != it._hostEnd) {
-      _hostCell = *it._hostIterator;
-      if (it._gridView.indexSet().containsForSubDomain(_subDomain1,_hostCell)) {
-        it._hostIntersectionIterator = it._hostGridView.ibegin(_hostCell);
-        it._hostIntersectionEnd = it._hostGridView.iend(_hostCell);
+      if (it._gridView.indexSet().containsForSubDomain(_subDomain1,*it._hostIterator)) {
+        it._hostIntersectionIterator = it._hostGridView.ibegin(*it._hostIterator);
+        it._hostIntersectionEnd = it._hostGridView.iend(*it._hostIterator);
         return true;
       }
       ++it._hostIterator;
@@ -100,7 +99,6 @@ class SubDomainToSubDomainController
 
   const SubDomainIndex _subDomain1;
   const SubDomainIndex _subDomain2;
-  HostCell _hostCell;
 };
 
 
@@ -109,8 +107,7 @@ class LeafSubDomainInterfaceIterator :
     public SubDomainInterfaceIterator<GridImp,
                                       typename GridImp::LeafGridView,
                                       typename detail::HostGridAccessor<GridImp>::Type::LeafGridView,
-                                      SubDomainToSubDomainController<typename
-                                      GridImp::SubDomainIndex,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity>
+                                      SubDomainToSubDomainController<typename GridImp::SubDomainIndex>
                                       >
 {
 
@@ -123,7 +120,7 @@ class LeafSubDomainInterfaceIterator :
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  typedef SubDomainToSubDomainController<typename GridImp::SubDomainIndex,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity> Controller;
+  typedef SubDomainToSubDomainController<typename GridImp::SubDomainIndex> Controller;
 
   typedef SubDomainInterfaceIterator<GridImp,
                                      typename GridImp::LeafGridView,
@@ -145,7 +142,7 @@ class LevelSubDomainInterfaceIterator :
     public SubDomainInterfaceIterator<GridImp,
                                       typename GridImp::LevelGridView,
                                       typename detail::HostGridAccessor<GridImp>::Type::LevelGridView,
-                                      SubDomainToSubDomainController<typename GridImp::SubDomainIndex,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity>
+                                      SubDomainToSubDomainController<typename GridImp::SubDomainIndex>
                                       >
 {
 
@@ -158,7 +155,7 @@ class LevelSubDomainInterfaceIterator :
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  typedef SubDomainToSubDomainController<typename GridImp::SubDomainIndex,typename detail::HostGridAccessor<GridImp>::Type::template Codim<0>::Entity> Controller;
+  typedef SubDomainToSubDomainController<typename GridImp::SubDomainIndex> Controller;
 
   typedef SubDomainInterfaceIterator<GridImp,
                                      typename GridImp::LevelGridView,
