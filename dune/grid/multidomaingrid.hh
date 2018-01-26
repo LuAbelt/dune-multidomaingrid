@@ -135,7 +135,7 @@ namespace Capabilities {
   template<typename MDGrid>
   struct threadSafe<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid> >
   {
-    static const bool v = threadSafe<MDGrid>::v;
+    static const bool v = false;
   };
 
 
