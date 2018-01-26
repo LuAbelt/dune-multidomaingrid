@@ -39,7 +39,8 @@ public:
 
 private:
 
-  typedef typename HostGridView::template Codim<0>::Iterator HostIterator;
+  using HostIterator = typename HostGridView::template Codim<0>::Iterator;
+  using HostCell     = typename HostIterator::Entity;
   typedef typename HostGridView::IntersectionIterator HostIntersectionIterator;
   typedef typename GridView::IntersectionIterator MultiDomainIntersectionIterator;
   typedef typename GridImp::SubDomainGrid::Traits::template Codim<0>::Entity SubDomainEntity;
@@ -132,8 +133,9 @@ private:
 
   void findInverseHostIntersection() const {
     assert(_hostIntersectionIterator->neighbor());
-    _inverseHostIntersection = _hostGridView.ibegin(_hostIntersectionIterator->outside());
-    while (_hostIntersectionIterator->inside() != _inverseHostIntersection->outside()) {
+    _hostOutsideCell = _hostIntersectionIterator->outside();
+    _inverseHostIntersection = _hostGridView.ibegin(_hostOutsideCell);
+    while (_hostCell != _inverseHostIntersection->outside()) {
       ++_inverseHostIntersection;
     }
     _inverseHostIntersectionValid = true;
@@ -156,7 +158,7 @@ public:
 
   //! Returns the entity of the corresponding cell in the first subdomain.
   Entity firstCell() const {
-    return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->inside());
+    return EntityWrapper<0,GridImp::dimension,GridImp>(_hostCell);
   }
 
   //! Returns the entity of the corresponding cell in the second subdomain.
@@ -237,7 +239,7 @@ public:
 
   //! Returns the  entity of the corresponding cell in the first subdomain.
   Entity inside() const {
-    return EntityWrapper<0,GridImp::dimension,GridImp>(_hostIntersectionIterator->inside());
+    return EntityWrapper<0,GridImp::dimension,GridImp>(_hostCell);
   }
 
   //! Returns the entity of the corresponding cell in the second subdomain.
@@ -325,7 +327,10 @@ private:
   HostIntersectionIterator _hostIntersectionIterator;
   HostIntersectionIterator _hostIntersectionEnd;
 
+  HostCell _hostCell;
+
   mutable HostIntersectionIterator _inverseHostIntersection;
+  mutable HostCell _hostOutsideCell;
   mutable bool _inverseHostIntersectionValid;
 
 };
