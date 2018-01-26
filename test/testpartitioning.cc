@@ -10,19 +10,24 @@
 int main(int argc, char** argv) {
   try {
     Dune::MPIHelper::instance(argc,argv);
+
     typedef Dune::YaspGrid<2> GridType;
+
     Dune::FieldVector<double,2> L(1.0);
     std::array<int,2> N = { {1,1} };
+
     GridType wgrid(L,N);
     typedef Dune::MultiDomainGrid<GridType,Dune::mdgrid::FewSubDomainsTraits<GridType::dimension,4> > Grid;
     Grid grid(wgrid);
     grid.globalRefine(5);
+
     typedef Grid::LeafGridView GridView;
     GridView gv = grid.leafGridView();
+
     grid.startSubDomainMarking();
     for (const auto& cell : elements(gv)) {
-      auto c = cell.geometry().global(
-        Dune::ReferenceElements<GridType::ctype,2>::general(cell.type()).position(0,0));
+      auto geo = cell.geometry();
+      auto c = geo.global(referenceElement(geo).position(0,0));
       double x = c[0];
       double y = c[1];
       if (x > 0.2) {
