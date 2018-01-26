@@ -12,9 +12,6 @@ namespace subdomain {
 template<int,int,typename>
 class EntityWrapper;
 
-template<int,typename>
-class EntityPointerWrapper;
-
 template<typename GridImp>
 class HierarchicIteratorWrapper
 {
@@ -28,9 +25,6 @@ class HierarchicIteratorWrapper
   template<int, int, typename>
   friend class EntityWrapper;
 
-  template<typename, typename>
-  friend class Dune::EntityPointer;
-
   using MultiDomainIterator = typename GridImp::MultiDomainGrid::template Codim<0>::Entity::HierarchicIterator;
 
 public:
@@ -39,9 +33,6 @@ public:
 
   using EntityWrapper        = Dune::mdgrid::subdomain::EntityWrapper<0,GridImp::dimension,GridImp>;
   using Entity               = typename GridImp::template Codim<0>::Entity;
-  using EntityPointerWrapper = Dune::mdgrid::subdomain::EntityPointerWrapper<0,GridImp>;
-  using EntityPointer        = typename GridImp::template Codim<0>::EntityPointer;
-
 
   HierarchicIteratorWrapper()
     : _grid(nullptr)
@@ -80,27 +71,6 @@ public:
     ++_multiDomainIterator;
     incrementToNextValidPosition();
   }
-
-public:
-
-  // TODO: Remove after 2.4
-  operator EntityPointerWrapper() const
-  {
-    return EntityPointerWrapper(dereference());
-  }
-
-  // TODO: Remove after 2.4
-  operator EntityPointer() const
-  {
-    return {dereference()};
-  }
-
-  // TODO: Remove after 2.4
-  bool equals(const EntityPointerWrapper& r) const
-  {
-    return _grid == r._grid && _multiDomainIterator == r._multiDomainEntityPointer;
-  }
-
 
 private:
 

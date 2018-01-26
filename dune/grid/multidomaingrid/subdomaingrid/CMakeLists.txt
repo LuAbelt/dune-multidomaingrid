@@ -1,7 +1,6 @@
 #install headers
 install(FILES
     entity.hh
-    entitypointer.hh
     geometry.hh
     gridview.hh
     hierarchiciterator.hh

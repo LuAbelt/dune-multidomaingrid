@@ -3,7 +3,6 @@
 
 #include <dune/grid/common/intersection.hh>
 
-#include <dune/grid/multidomaingrid/entitypointer.hh>
 #include <dune/grid/multidomaingrid/hostgridaccessor.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/intersection.hh>
 
@@ -28,7 +27,6 @@ class IntersectionWrapper {
   friend class IntersectionIteratorWrapper;
 
   using HostIntersection = HostIntersection_;
-  using EntityPointer    = typename GridImp::Traits::template Codim<0>::EntityPointer;
   using Entity           = typename GridImp::Traits::template Codim<0>::Entity;
   using Geometry         = typename GridImp::Traits::template Codim<1>::Geometry;
   using LocalGeometry    = typename GridImp::Traits::template Codim<1>::LocalGeometry;

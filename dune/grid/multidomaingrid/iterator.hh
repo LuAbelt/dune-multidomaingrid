@@ -14,9 +14,6 @@ namespace mdgrid {
 template<int codim, int dim, typename GridImp>
 class EntityWrapper;
 
-template<int codim, typename GridImp>
-class EntityPointerWrapper;
-
 template<typename HostGridView, int codim, PartitionIteratorType pitype, typename GridImp>
 class IteratorWrapper
 {
@@ -26,9 +23,6 @@ class IteratorWrapper
 
   template< int cd, class Grid, class IteratorImp >
   friend class Dune::EntityIterator;
-
-  template< class Grid, class IteratorImp >
-  friend class Dune::EntityPointer;
 
   static const int codimension = codim;
 
@@ -40,8 +34,6 @@ public:
   using Entity        = typename GridImp::template Codim<codim>::Entity;
 
 private:
-  using EntityPointerWrapper = Dune::mdgrid::EntityPointerWrapper<codim,GridImp>;
-  using EntityPointer        = typename GridImp::template Codim<codim>::EntityPointer;
   using EntityWrapper        = Dune::mdgrid::EntityWrapper<codim,GridImp::dimension,GridImp>;
 
   IteratorWrapper() = default;
@@ -74,24 +66,6 @@ private:
   }
 
 public:
-
-  // TODO: Remove after 2.4
-  operator EntityPointer() const
-  {
-    return EntityPointer(dereference());
-  }
-
-  // TODO: Remove after 2.4
-  operator EntityPointerWrapper() const
-  {
-    return EntityPointerWrapper(dereference());
-  }
-
-  // TODO: Remove after 2.4
-  bool equals(const EntityPointerWrapper& r) const
-  {
-    return _hostIterator == r._hostEntityPointer;
-  }
 
 private:
 

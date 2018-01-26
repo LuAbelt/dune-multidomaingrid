@@ -12,7 +12,6 @@
 #include <dune/grid/multidomaingrid/subdomaingrid/geometry.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/localgeometry.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/entity.hh>
-#include <dune/grid/multidomaingrid/subdomaingrid/entitypointer.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/iterator.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/hierarchiciterator.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/intersection.hh>
@@ -129,7 +128,6 @@ public:
       using LocalGeometry = Dune::Geometry<dim-cd, dim, const Grid, LocalGeometryWrapper>;
 
       using Entity        = Dune::Entity<cd, dim, const Grid, EntityWrapper>;
-      using EntityPointer = Dune::EntityPointer<const Grid, EntityPointerWrapper<cd,const Grid> >;
 
       using EntitySeed    = EntitySeedWrapper<typename MDGrid::HostGrid::template Codim<cd>::EntitySeed>;
 
@@ -213,9 +211,6 @@ class SubDomainGrid :
   template<int codim, int dim, typename GridImp>
   friend class EntityWrapper;
 
-  template<int codim, typename GridImp>
-  friend class EntityPointerWrapper;
-
   template<typename, typename, int codim, PartitionIteratorType pitype, typename GridImp>
   friend class IteratorWrapper;
 
@@ -293,21 +288,6 @@ public:
 
   /** @name Dune grid interface methods */
   /*@{*/
-
-  //! Reconstruct EntityPointer from EntitySeed
-  template<typename EntitySeed>
-  typename Traits::template Codim<EntitySeed::codimension>::EntityPointer
-  DUNE_DEPRECATED_MSG("entityPointer() is deprecated and will be removed after the release of dune-grid 2.4. Use entity() instead to directly obtain an Entity object.")
-  entityPointer(const EntitySeed& entitySeed) const
-  {
-    return
-      EntityPointerWrapper<EntitySeed::codimension,const GridImp>(
-        this,
-        typename MDGrid::template Codim<EntitySeed::codimension>::EntityPointer(
-          _grid.entityPointer(entitySeed)
-        )
-      );
-  }
 
   template<typename EntitySeed>
   typename Traits::template Codim<EntitySeed::codimension>::Entity
@@ -626,15 +606,6 @@ public:
 
   /** @name Entity conversion methods */
   /*@{*/
-  template<int cc>
-  typename Traits::template Codim<cc>::EntityPointer subDomainEntityPointer(const typename MDGrid::Traits::template Codim<cc>::Entity& mdEntity) const {
-    return EntityPointerWrapper<cc,const SubDomainGrid<MDGrid> >(*this,typename MDGrid::Traits::template Codim<cc>::EntityPointer(mdEntity));
-  }
-
-  template<typename EntityType>
-  typename Traits::template Codim<EntityType::codimension>::EntityPointer subDomainEntityPointer(const EntityType& mdEntity) const {
-    return subDomainEntityPointer<EntityType::codimension>(mdEntity);
-  }
 
   template<typename EntityType>
   typename Traits::template Codim<EntityType::codimension>::Entity subDomainEntity(const EntityType& mdEntity) const {
@@ -647,18 +618,8 @@ public:
   }
 
   template<typename EntityType>
-  static typename MDGrid::template MultiDomainEntityPointer<EntityType>::type multiDomainEntityPointer(const EntityType& e) {
-    return SubDomainGrid::getRealImplementation(e).multiDomainEntity();
-  }
-
-  template<typename EntityType>
   static const typename MDGrid::template HostEntity<EntityType>::type& hostEntity(const EntityType& e) {
     return SubDomainGrid::getRealImplementation(e).hostEntity();
-  }
-
-  template<typename EntityType>
-  static typename MDGrid::template HostEntityPointer<EntityType>::type hostEntityPointer(const EntityType& e) {
-    return typename MDGrid::template HostEntityPointer<EntityType>::type(SubDomainGrid::getRealImplementation(e).hostEntity());
   }
 
   template<typename IntersectionType>

@@ -13,9 +13,6 @@ namespace mdgrid {
 template<int codim, int dim, typename GridImp>
 class EntityWrapper;
 
-template<int codim, typename GridImp>
-class EntityPointerWrapper;
-
 template<typename GridImp>
 class LeafIntersectionIteratorWrapper;
 
@@ -81,13 +78,9 @@ class EntityWrapperBase :
     public EntityDefaultImplementation<codim,dim,GridImp,EntityWrapper>
 {
 
-  template<int, typename>
-  friend class EntityPointerWrapper;
-
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  typedef typename GridImp::HostGrid::Traits::template Codim<codim>::EntityPointer HostEntityPointer;
   typedef typename GridImp::HostGrid::Traits::template Codim<codim>::Entity HostEntity;
 
 public:
@@ -157,9 +150,6 @@ class EntityWrapper :
 
   using Base = EntityWrapperBase<codim,dim,GridImp>;
 
-  template<int, typename>
-  friend class EntityPointerWrapper;
-
   template<typename,typename>
   friend class MultiDomainGrid;
 
@@ -176,9 +166,6 @@ class EntityWrapper<0,dim,GridImp> :
 {
 
   using Base = EntityWrapperBase<0,dim,GridImp>;
-
-  template<int, typename>
-  friend class EntityPointerWrapper;
 
   template<typename,typename>
   friend class MultiDomainGrid;

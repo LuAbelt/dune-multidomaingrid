@@ -18,9 +18,6 @@ namespace subdomain {
 template<int codim, int dim, typename GridImp>
 class EntityWrapper;
 
-template<int codim, typename GridImp>
-class EntityPointerWrapper;
-
 template<typename,typename,typename>
 class IntersectionIteratorWrapper;
 
@@ -90,7 +87,6 @@ public:
 
   using EntitySeed    = EntitySeedWrapper<typename HostEntity::EntitySeed>;
   using Geometry      = typename GridImp::template Codim<codim>::Geometry;
-  using EntityPointer = typename GridImp::Traits::template Codim<0>::EntityPointer;
 
   EntityWrapperBase()
     : _grid(nullptr)
@@ -167,9 +163,6 @@ class EntityWrapper
 
   using Base = EntityWrapperBase<codim,dim,GridImp>;
 
-  template<int, typename>
-  friend class EntityPointerWrapper;
-
   template<typename>
   friend class SubDomainGrid;
 
@@ -193,9 +186,6 @@ class EntityWrapper<0,dim,GridImp>
 {
 
   using Base = EntityWrapperBase<0,dim,GridImp>;
-
-  template<int, typename>
-  friend class EntityPointerWrapper;
 
   template<typename>
   friend class SubDomainGrid;

@@ -14,7 +14,6 @@
 #include <dune/grid/multidomaingrid/geometry.hh>
 #include <dune/grid/multidomaingrid/localgeometry.hh>
 #include <dune/grid/multidomaingrid/entity.hh>
-#include <dune/grid/multidomaingrid/entitypointer.hh>
 #include <dune/grid/multidomaingrid/iterator.hh>
 #include <dune/grid/multidomaingrid/hierarchiciterator.hh>
 #include <dune/grid/multidomaingrid/intersection.hh>
@@ -108,7 +107,6 @@ public:
       using LocalGeometry = Dune::Geometry<dim-cd, dimw, const Grid, LocalGeometryWrapper>;
 
       using Entity        = Dune::Entity<cd, dim, const Grid, EntityWrapper>;
-      using EntityPointer = Dune::EntityPointer<const Grid, EntityPointerWrapper<cd,const Grid> >;
 
       using EntitySeed    = EntitySeedWrapper<typename HostGrid::template Codim<cd>::EntitySeed>;
 
@@ -254,9 +252,6 @@ private:
   template<int codim, int dim, typename GridImp>
   friend class EntityWrapper;
 
-  template<int codim, typename GridImp>
-  friend class EntityPointerWrapper;
-
   template<typename,int,PartitionIteratorType,typename>
   friend class IteratorWrapper;
 
@@ -376,23 +371,12 @@ private:
     typedef typename HostGrid::Traits::template Codim<Entity::codimension>::Entity type;
   };
 
-  template<typename Entity>
-  struct HostEntityPointer {
-    typedef typename HostGrid::Traits::template Codim<Entity::codimension>::EntityPointer type;
-  };
-
   // typedefs for extracting the multidomain entity types from subdomain entities
 
   template<typename Entity>
   struct MultiDomainEntity {
     typedef typename Traits::template Codim<Entity::codimension>::Entity type;
   };
-
-  template<typename Entity>
-  struct MultiDomainEntityPointer {
-    typedef typename Traits::template Codim<Entity::codimension>::EntityPointer type;
-  };
-
 
 public:
 
@@ -482,16 +466,6 @@ public:
 
   /** @name Dune grid interface methods */
   /*@{*/
-
-  //! Reconstruct EntityPointer from EntitySeed
-  template<typename EntitySeed>
-  typename Traits::template Codim<EntitySeed::codimension>::EntityPointer
-  DUNE_DEPRECATED_MSG("entityPointer() is deprecated and will be removed after the release of dune-grid 2.4. Use entity() instead to directly obtain an Entity object.")
-  entityPointer(const EntitySeed& entitySeed) const
-  {
-    return {EntityPointerWrapper<EntitySeed::codimension,const GridImp>(_hostGrid.entity(entitySeed.hostEntitySeed()))};
-  }
-
 
   template<typename EntitySeed>
   typename Traits::template Codim<EntitySeed::codimension>::Entity
@@ -1011,28 +985,10 @@ public:
     return MultiDomainGrid::getRealImplementation(e).hostEntity();
   }
 
-  //! Returns an EntityPointer to the corresponding host entity.
-  template<typename EntityType>
-  static const typename HostEntityPointer<EntityType>::type
-  DUNE_DEPRECATED_MSG("Deprecated in 2.4, use hostEntity() instead")
-  hostEntityPointer(const EntityType& e)
-  {
-    return {MultiDomainGrid::getRealImplementation(e).hostEntity()};
-  }
-
   template<typename EntityType>
   static const typename MultiDomainEntity<EntityType>::type& multiDomainEntity(const EntityType& e)
   {
     return SubDomainGrid::getRealImplementation(e).multiDomainEntity();
-  }
-
-  //! Returns an EntityPointer to the corresponding MultiDomain entity.
-  template<typename EntityType>
-  const typename MultiDomainEntityPointer<EntityType>::type
-  DUNE_DEPRECATED_MSG("Deprecated in 2.4, use multiDomainEntity() instead")
-  multiDomainEntityPointer(const EntityType& e) const
-  {
-    return {SubDomainGrid::getRealImplementation(e).multiDomainEntity()};
   }
 
   template<typename IntersectionType>
