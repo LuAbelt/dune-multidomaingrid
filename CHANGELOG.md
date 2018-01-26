@@ -1,17 +1,25 @@
 MultiDomainGrid
 ===============
 
-This is the 2.4.0 release of MultiDomainGrid, a meta grid build on top of the
+This is the 2.6.0 release of MultiDomainGrid, a meta grid build on top of the
 [DUNE][1] grid interface. See the file README for further details including
 license information.
 
-If you need help, please ask via [GitHub][2]) If you find bugs, you can also
+If you need help, please ask via [Dune GitLab][2]) If you find bugs, you can also
 submit them to the [bugtracker][3]. Even better, if you have managed to fix a
-problem, open a [pull request][4] to get your patch merged into the library.
+problem, open a [merge request][4] to get your patch merged into the library.
 
 
 Changes
 -------
+
+### MultiDomainGrid 2.6
+
+* Bump build toolchain requirements to GCC 5 and CMake 3.1.0.
+
+* Compatibility with DUNE 2.6.0.
+
+* All deprecated functionality removed.
 
 
 ### MultiDomainGrid 2.4
@@ -88,6 +96,6 @@ Links
 -----
 
 [1]: http://dune-project.org
-[2]: http://github.com/smuething/dune-multidomaingrid
-[3]: https://github.com/smuething/dune-multidomaingrid/issues
-[4]: https://github.com/smuething/dune-multidomaingrid/pulls
+[2]: https://gitlab.dune-project.org/extensions/dune-multidomaingrid
+[3]: https://gitlab.dune-project.org/extensions/dune-multidomaingrid/issues
+[4]: https://gitlab.dune-project.org/extensions/dune-multidomaingrid/merge_requests
