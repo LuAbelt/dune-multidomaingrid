@@ -74,7 +74,7 @@ void check_grid(std::size_t cells_per_dim) {
 
   // check communication interface
   checkCommunication(grid,-1,Dune::dvverb);
-  for(unsigned int l=0; l<=grid.maxLevel(); ++l)
+  for(int l=0; l<=grid.maxLevel(); ++l)
     checkCommunication(grid,l,Dune::dvverb);
 
   // check the method geometryInFather()
