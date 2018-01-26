@@ -24,10 +24,10 @@ class IntersectionIteratorWrapper {
   template<typename,typename,typename>
   friend class subdomain::IntersectionIteratorWrapper;
 
-  template<typename,PartitionIteratorType>
+  template<typename>
   friend class LevelGridView;
 
-  template<typename,PartitionIteratorType>
+  template<typename>
   friend class LeafGridView;
 
   using HostIntersectionIterator = HostIntersectionIterator_;

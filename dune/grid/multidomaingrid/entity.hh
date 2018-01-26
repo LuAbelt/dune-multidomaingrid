@@ -31,10 +31,10 @@ class IntersectionIteratorWrapper;
 template<typename HostGrid, typename MDGridTraits>
 class MultiDomainGrid;
 
-template<typename, PartitionIteratorType>
+template<typename>
 class LevelGridView;
 
-template<typename, PartitionIteratorType>
+template<typename>
 class LeafGridView;
 
 
@@ -183,10 +183,10 @@ class EntityWrapper<0,dim,GridImp> :
   template<typename,typename>
   friend class MultiDomainGrid;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LevelGridView;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LeafGridView;
 
   using Base::hostEntity;

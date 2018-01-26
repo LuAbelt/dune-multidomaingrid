@@ -118,16 +118,8 @@ public:
 
     using HierarchicIterator = Dune::EntityIterator< 0, const Grid, HierarchicIteratorWrapper< const Grid > >;
 
-
-    template <PartitionIteratorType pitype>
-    struct Partition
-    {
-
-      using LevelGridView = Dune::GridView<LevelGridViewTraits<const Grid,pitype> >;
-
-      using LeafGridView = Dune::GridView<LeafGridViewTraits<const Grid,pitype> >;
-
-    };
+    using LevelGridView = Dune::GridView<LevelGridViewTraits<const Grid>>;
+    using LeafGridView = Dune::GridView<LeafGridViewTraits<const Grid>>;
 
     template <int cd>
     struct Codim
@@ -149,7 +141,7 @@ public:
           cd,
           const Grid,
           IteratorWrapper<
-            typename Traits::template Partition<pitype>::LevelGridView,
+            typename Traits::LevelGridView,
             typename MDGrid::LevelGridView::template Codim<cd>::template Partition<pitype>::Iterator,
             cd,
             pitype,
@@ -161,7 +153,7 @@ public:
           cd,
           const Grid,
           IteratorWrapper<
-            typename Traits::template Partition<pitype>::LeafGridView,
+            typename Traits::LeafGridView,
             typename MDGrid::LeafGridView::template Codim<cd>::template Partition<pitype>::Iterator,
             cd,
             pitype,
@@ -251,10 +243,10 @@ class SubDomainGrid :
   template<typename,typename,typename>
   friend class IntersectionWrapper;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LevelGridView;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LeafGridView;
 
   typedef GridDefaultImplementation<MDGrid::dimension,
@@ -337,7 +329,7 @@ public:
   template<int codim>
   typename Traits::template Codim<codim>::LevelIterator lbegin(int level) const {
     return IteratorWrapper<
-      typename Traits::template Partition<All_Partition>::LevelGridView,
+      typename Traits::LevelGridView,
       typename MultiDomainGrid::LevelGridView::template Codim<codim>::template Partition<All_Partition>::Iterator,
       codim,
       All_Partition,
@@ -352,7 +344,7 @@ public:
   template<int codim>
   typename Traits::template Codim<codim>::LevelIterator lend(int level) const {
     return IteratorWrapper<
-      typename Traits::template Partition<All_Partition>::LevelGridView,
+      typename Traits::LevelGridView,
       typename MultiDomainGrid::LevelGridView::template Codim<codim>::template Partition<All_Partition>::Iterator,
       codim,
       All_Partition,
@@ -367,7 +359,7 @@ public:
   template<int codim, PartitionIteratorType pitype>
   typename Traits::template Codim<codim>::template Partition<pitype>::LevelIterator lbegin(int level) const {
     return IteratorWrapper<
-      typename Traits::template Partition<pitype>::LevelGridView,
+      typename Traits::LevelGridView,
       typename MultiDomainGrid::LevelGridView::template Codim<codim>::template Partition<pitype>::Iterator,
       codim,
       pitype,
@@ -382,7 +374,7 @@ public:
   template<int codim, PartitionIteratorType pitype>
   typename Traits::template Codim<codim>::template Partition<pitype>::LevelIterator lend(int level) const {
     return IteratorWrapper<
-      typename Traits::template Partition<pitype>::LevelGridView,
+      typename Traits::LevelGridView,
       typename MultiDomainGrid::LevelGridView::template Codim<codim>::template Partition<pitype>::Iterator,
       codim,
       pitype,
@@ -397,7 +389,7 @@ public:
   template<int codim>
   typename Traits::template Codim<codim>::LeafIterator leafbegin() const {
     return IteratorWrapper<
-      typename Traits::template Partition<All_Partition>::LeafGridView,
+      typename Traits::LeafGridView,
       typename MultiDomainGrid::LeafGridView::template Codim<codim>::template Partition<All_Partition>::Iterator,
       codim,
       All_Partition,
@@ -412,7 +404,7 @@ public:
   template<int codim>
   typename Traits::template Codim<codim>::LeafIterator leafend() const {
     return IteratorWrapper<
-      typename Traits::template Partition<All_Partition>::LeafGridView,
+      typename Traits::LeafGridView,
       typename MultiDomainGrid::LeafGridView::template Codim<codim>::template Partition<All_Partition>::Iterator,
       codim,
       All_Partition,
@@ -427,7 +419,7 @@ public:
   template<int codim, PartitionIteratorType pitype>
   typename Traits::template Codim<codim>::template Partition<pitype>::LeafIterator leafbegin() const {
     return IteratorWrapper<
-      typename Traits::template Partition<pitype>::LeafGridView,
+      typename Traits::LeafGridView,
       typename MultiDomainGrid::LeafGridView::template Codim<codim>::template Partition<pitype>::Iterator,
       codim,
       pitype,
@@ -442,7 +434,7 @@ public:
   template<int codim, PartitionIteratorType pitype>
   typename Traits::template Codim<codim>::template Partition<pitype>::LeafIterator leafend() const {
     return IteratorWrapper<
-      typename Traits::template Partition<pitype>::LeafGridView,
+      typename Traits::LeafGridView,
       typename MultiDomainGrid::LeafGridView::template Codim<codim>::template Partition<pitype>::Iterator,
       codim,
       pitype,
