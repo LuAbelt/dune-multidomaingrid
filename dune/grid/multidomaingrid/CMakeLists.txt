@@ -5,7 +5,6 @@ install(FILES
   allsubdomaininterfacesiterator.hh
   arraybasedset.hh
   entity.hh
-  entitypointer.hh
   geometry.hh
   gridview.hh
   hierarchiciterator.hh

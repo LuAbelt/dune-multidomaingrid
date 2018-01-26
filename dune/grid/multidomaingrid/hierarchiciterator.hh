@@ -8,9 +8,6 @@ namespace mdgrid {
 template<int codim, int dim, typename GridImp>
 class EntityWrapper;
 
-template<int codim, typename GridImp>
-class EntityPointerWrapper;
-
 template<typename GridImp>
 class HierarchicIteratorWrapper
 {
@@ -21,8 +18,6 @@ public:
 
   using Entity               = typename GridImp::template Codim<0>::Entity;
   using EntityWrapper        = Dune::mdgrid::EntityWrapper<0,GridImp::dimension,GridImp>;
-  using EntityPointerWrapper = Dune::mdgrid::EntityPointerWrapper<0,GridImp>;
-  using EntityPointer        = typename GridImp::template Codim<0>::EntityPointer;
   using HostIterator         = typename GridImp::HostGrid::HierarchicIterator;
 
   HierarchicIteratorWrapper() = default;
@@ -48,26 +43,6 @@ public:
   int level() const
   {
     return _hostIterator.level();
-  }
-
-public:
-
-  // TODO: Remove after 2.4
-  operator EntityPointerWrapper() const
-  {
-    return EntityPointerWrapper(dereference());
-  }
-
-  // TODO: Remove after 2.4
-  operator EntityPointer() const
-  {
-    return {dereference()};
-  }
-
-  // TODO: Remove after 2.4
-  bool equals(const EntityPointerWrapper& r) const
-  {
-    return _hostIterator == r._hostEntityPointer;
   }
 
 private:

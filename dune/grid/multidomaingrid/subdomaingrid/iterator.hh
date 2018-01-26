@@ -14,9 +14,6 @@ namespace subdomain {
 template<typename MDGrid>
 class SubDomainGrid;
 
-template<int,typename>
-class EntityPointerWrapper;
-
 template<int,int,typename>
 class EntityWrapper;
 
@@ -36,9 +33,6 @@ class IteratorWrapper
   template< int cd, class Grid, class IteratorImp >
   friend class Dune::EntityIterator;
 
-  template<typename, typename>
-  friend class Dune::EntityPointer;
-
   static const int codimension = codim;
 
   using IndexSet      = typename GridView::IndexSet;
@@ -50,8 +44,6 @@ public:
 
 private:
 
-  using EntityPointerWrapper = Dune::mdgrid::subdomain::EntityPointerWrapper<codim,GridImp>;
-  using EntityPointer        = typename GridImp::template Codim<codim>::EntityPointer;
   using EntityWrapper        = Dune::mdgrid::subdomain::EntityWrapper<codim,GridImp::dimension,GridImp>;
 
   IteratorWrapper()
@@ -101,24 +93,6 @@ private:
   }
 
 public:
-
-  // TODO: Remove after 2.4
-  operator EntityPointerWrapper() const
-  {
-    return EntityPointerWrapper(dereference());
-  }
-
-  // TODO: Remove after 2.4
-  operator EntityPointer() const
-  {
-    return {dereference()};
-  }
-
-  // TODO: Remove after 2.4
-  bool equals(const EntityPointerWrapper& r) const
-  {
-    return _grid == r._grid && _multiDomainIterator == r._multiDomainEntityPointer;
-  }
 
 private:
 
