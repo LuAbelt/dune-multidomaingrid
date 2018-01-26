@@ -33,13 +33,6 @@ namespace Capabilities {
   };
 
 
-  template<class HostGrid, typename MDGridTraits>
-  struct isParallel<MultiDomainGrid<HostGrid,MDGridTraits> >
-  {
-    static const bool v = isParallel<HostGrid>::v;
-  };
-
-
   template<class HostGrid, typename MDGridTraits, int codim>
   struct canCommunicate<MultiDomainGrid<HostGrid,MDGridTraits>, codim>
   {
@@ -89,6 +82,13 @@ namespace Capabilities {
     static const unsigned int topologyId = hasSingleGeometryType<HostGrid>::topologyId;
   };
 
+
+  template<typename HostGrid, typename MDGridTraits, int codim>
+  struct hasGeometry<MultiDomainGrid<HostGrid,MDGridTraits>,codim>
+  {
+    static const bool v = hasGeometry<HostGrid,codim>::v;
+  };
+
 } // namespace Capabilities
 
 
@@ -101,13 +101,6 @@ namespace Capabilities {
   struct hasEntity<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid>, codim>
   {
     static const bool v = hasEntity<MDGrid,codim>::v;
-  };
-
-
-  template<class MDGrid>
-  struct isParallel<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid> >
-  {
-    static const bool v = isParallel<MDGrid>::v;
   };
 
 
@@ -142,7 +135,7 @@ namespace Capabilities {
   template<typename MDGrid>
   struct threadSafe<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid> >
   {
-    static const bool v = threadSafe<MDGrid>::v;
+    static const bool v = false;
   };
 
 
@@ -159,6 +152,13 @@ namespace Capabilities {
     static const bool v = hasSingleGeometryType<MDGrid>::v;
     static const unsigned int topologyId = hasSingleGeometryType<MDGrid>::topologyId;
   };
+
+  template<typename MDGrid, int codim>
+  struct hasGeometry<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid>,codim >
+  {
+    static const bool v = hasGeometry<MDGrid,codim>::v;
+  };
+
 
 } // namespace Capabilities
 
