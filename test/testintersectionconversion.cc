@@ -26,14 +26,13 @@ int main(int argc, char** argv)
     MDGrid mdgrid(hostgrid,true);
 
     typedef MDGrid::LeafGridView MDGV;
-    typedef MDGV::Codim<0>::Iterator Iterator;
 
     MDGV mdgv = mdgrid.leafGridView();
 
     mdgrid.startSubDomainMarking();
 
-    for(Iterator it = mdgv.begin<0>(); it != mdgv.end<0>(); ++it)
-      mdgrid.addToSubDomain(0,*it);
+    for(auto&& cell : elements(mdgv))
+      mdgrid.addToSubDomain(0,cell);
 
     mdgrid.preUpdateSubDomains();
     mdgrid.updateSubDomains();
@@ -46,8 +45,8 @@ int main(int argc, char** argv)
     SDGrid::LeafGridView::Codim<0>::Iterator it = sdgv.begin<0>();
     SDGrid::LeafGridView::IntersectionIterator iit = sdgv.ibegin(*it);
 
-    const MDGrid::LeafGridView::Intersection& is1 DUNE_UNUSED = sdgrid.multiDomainIntersection(*iit);
-    const MDGrid::LeafGridView::Intersection& is2 DUNE_UNUSED = mdgrid.multiDomainIntersection(*iit);
+    MDGrid::LeafGridView::Intersection is1 DUNE_UNUSED = sdgrid.multiDomainIntersection(*iit);
+    MDGrid::LeafGridView::Intersection is2 DUNE_UNUSED = mdgrid.multiDomainIntersection(*iit);
 
     assert(is1.geometry().center() == is2.geometry().center());
 

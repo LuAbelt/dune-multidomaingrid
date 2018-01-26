@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <tuple>
+
 #include <dune/grid/common/indexidset.hh>
 #include <dune/grid/multidomaingrid/utility.hh>
 
@@ -43,30 +44,26 @@ class IndexSetWrapper :
 
   typedef IndexSetWrapper<GridImp,MDIndexSet> ThisType;
 
-  typedef typename std::remove_const<GridImp>::type::HostGridType HostGrid;
-  typedef typename std::remove_const<GridImp>::type::MDGridType MDGrid;
-
-  typedef typename std::remove_const<GridImp>::type::ctype ctype;
+  using HostGrid = typename std::remove_const_t<GridImp>::HostGridType;
+  using MDGrid   = typename std::remove_const_t<GridImp>::MDGridType;
+  using ctype    = typename std::remove_const_t<GridImp>::ctype;
 
 public:
 
   typedef typename MDIndexSet::Types Types;
 
-  //typedef typename remove_const<GridImp>::type::SubDomainSet SubDomainSet;
-  typedef typename remove_const<GridImp>::type::SubDomainIndex SubDomainIndex;
+  using SubDomainIndex = typename std::remove_const_t<GridImp>::SubDomainIndex;
   typedef typename MDIndexSet::IndexType IndexType;
-  static const int dimension = remove_const<GridImp>::type::dimension;
-  //typedef typename SubDomainSet::DomainType DomainType;
-  //static const std::size_t maxSubDomains = MDGrid::MDGridTraits::template Codim
+  static const int dimension = std::remove_const_t<GridImp>::dimension;
 
 private:
 
-  typedef typename remove_const<GridImp>::type::Traits::template Codim<0>::Entity Codim0Entity;
+  using Codim0Entity = typename std::remove_const_t<GridImp>::Traits::template Codim<0>::Entity;
 
 public:
 
   template<int codim>
-  IndexType index(const typename remove_const<GridImp>::type::Traits::template Codim<codim>::Entity& e) const {
+  IndexType index(const typename std::remove_const_t<GridImp>::Traits::template Codim<codim>::Entity& e) const {
     return _mdIndexSet.template index<codim>(_grid.domain(),_grid.multiDomainEntity(e));
   }
 
@@ -75,17 +72,14 @@ public:
     return index<Entity::codimension>(e);
   }
 
-  template<int codim>
-  IndexType subIndex(const Codim0Entity& e, int i) const {
+  template<int codim, typename Entity>
+  IndexType subIndex(const Entity& e, int i) const {
     return _mdIndexSet.subIndex(_grid.domain(),_grid.multiDomainEntity(e),i,codim);
   }
 
-  IndexType subIndex(const Codim0Entity& e, int i, unsigned int codim) const {
+  template<typename Entity>
+  IndexType subIndex(const Entity& e, int i, unsigned int codim) const {
     return _mdIndexSet.subIndex(_grid.domain(),_grid.multiDomainEntity(e),i,codim);
-  }
-
-  const std::vector<GeometryType>& geomTypes(int codim) const {
-    return _mdIndexSet.geomTypesForSubDomain(_grid.domain(),codim);
   }
 
   Types types(int codim) const {

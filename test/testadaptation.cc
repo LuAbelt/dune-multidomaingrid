@@ -1,6 +1,5 @@
 #include "config.h"
 #define GRIDDIM 2
-#define ALUGRID_SIMPLEX
 
 #include <dune/common/parallel/mpihelper.hh>
 #include <dune/grid/utility/structuredgridfactory.hh>
@@ -19,7 +18,7 @@ int main(int argc, char** argv) {
     Dune::FieldVector<double,2> lower_left(0.0);
     Dune::FieldVector<double,2> upper_right(1.0);
     std::array<unsigned int,2> N = {{16,16}};
-    std::shared_ptr<AdaptableGrid> gridPtr = Dune::StructuredGridFactory<AdaptableGrid>::createCubeGrid(
+    auto gridPtr = Dune::StructuredGridFactory<AdaptableGrid>::createCubeGrid(
       lower_left,
       upper_right,
       N
@@ -38,8 +37,8 @@ int main(int argc, char** argv) {
 
     grid.startSubDomainMarking();
     for (const auto& cell : elements(gv)) {
-      Dune::FieldVector<AdaptableGrid::ctype,2> c = cell.geometry().global(
-        Dune::ReferenceElements<AdaptableGrid::ctype,2>::general(cell.type()).position(0,0));
+      auto geo = cell.geometry();
+      auto c = geo.global(referenceElement(geo).position(0,0));
       double x = c[0];
       double y = c[1];
       if (x > 0.2) {
@@ -66,8 +65,8 @@ int main(int argc, char** argv) {
     printStatus(grid,"adaptation",counter++);
 
     for (const auto& cell : elements(gv)) {
-      Dune::FieldVector<AdaptableGrid::ctype,2> c = cell.geometry().global(
-        Dune::ReferenceElements<AdaptableGrid::ctype,2>::general(cell.type()).position(0,0));
+      auto geo = cell.geometry();
+      auto c = geo.global(referenceElement(geo).position(0,0));
       double y = c[1];
       if (y > 0.5) {
         grid.mark(1,cell);
@@ -82,8 +81,8 @@ int main(int argc, char** argv) {
     printStatus(grid,"adaptation",counter++);
 
     for (const auto& cell : elements(gv)) {
-      Dune::FieldVector<AdaptableGrid::ctype,2> c = cell.geometry().global(
-        Dune::ReferenceElements<AdaptableGrid::ctype,2>::general(cell.type()).position(0,0));
+      auto geo = cell.geometry();
+      auto c = geo.global(referenceElement(geo).position(0,0));
       double y = c[1];
       if (y > 0.5) {
         grid.mark(-1,cell);

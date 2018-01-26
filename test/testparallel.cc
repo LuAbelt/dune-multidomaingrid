@@ -2,7 +2,6 @@
 
 #include <dune/common/parallel/mpihelper.hh>
 #include <dune/grid/yaspgrid.hh>
-#include <dune/grid/alugrid.hh>
 #include <dune/grid/io/file/gmshreader.hh>
 #include <dune/grid/multidomaingrid.hh>
 #include <dune/grid/io/file/vtk/vtkwriter.hh>
@@ -211,21 +210,6 @@ int main(int argc, char** argv)
 
       testGrid(hostgrid,"YaspGrid_2",mpihelper);
     }
-    /*
-    {
-      typedef Dune::ALUSimplexGrid<2,2> HostGrid;
-
-      std::vector<int> boundaryid;
-      std::vector<int> elementid;
-      std::shared_ptr<HostGrid> gridptr
-        (Dune::GmshReader<HostGrid>::read("square.msh",boundaryid, elementid,
-                                          true, false));
-
-      gridptr->loadBalance();
-
-      testGrid(*gridptr,"AluSimplexGrid_2_2",mpihelper);
-    }
-    */
   }
   catch (std::exception & e) {
     std::cout << "STL ERROR: " << e.what() << std::endl;

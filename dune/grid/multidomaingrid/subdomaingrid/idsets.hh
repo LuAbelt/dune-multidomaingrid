@@ -1,6 +1,8 @@
 #ifndef DUNE_MULTIDOMAINGRID_SUBDOMAINGRID_IDSETS_HH
 #define DUNE_MULTIDOMAINGRID_SUBDOMAINGRID_IDSETS_HH
 
+#include <type_traits>
+
 #include <dune/grid/common/indexidset.hh>
 
 namespace Dune {
@@ -21,15 +23,15 @@ class IdSetWrapper :
   template<typename>
   friend class SubDomainGrid;
 
-  typedef typename remove_const<GridImp>::type::HostGridType HostGrid;
-  typedef typename remove_const<GridImp>::type::Traits::template Codim<0>::Entity Codim0Entity;
+  using HostGrid     = typename std::remove_const_t<GridImp>::HostGridType;
+  using Codim0Entity = typename std::remove_const_t<GridImp>::Traits::template Codim<0>::Entity;
 
 public:
 
   typedef typename HostIdSet::IdType IdType;
 
   template<int codim>
-  IdType id(const typename remove_const<GridImp>::type::Traits::template Codim<codim>::Entity& e) const {
+  IdType id(const typename std::remove_const_t<GridImp>::Traits::template Codim<codim>::Entity& e) const {
     assert(_grid.containsHostEntity(_grid.hostEntity(e)));
     return _hostIdSet.id(_grid.hostEntity(e));
   }

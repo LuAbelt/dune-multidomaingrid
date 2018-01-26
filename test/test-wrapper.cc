@@ -35,9 +35,9 @@ void check_grid(std::size_t cells_per_dim) {
   Dune::FieldVector<typename HostGrid::ctype,dim> lengths(1.0);
   for (unsigned int i = 0; i < dim; i++)
     lengths[i] = i + 1;
-  std::array<int,dim> elements;
-  std::fill(elements.begin(), elements.end(), cells_per_dim);
-  HostGrid wgrid(lengths, elements);
+  std::array<int,dim> N;
+  std::fill(N.begin(), N.end(), cells_per_dim);
+  HostGrid wgrid(lengths, N);
 
   typedef Dune::MultiDomainGrid<HostGrid,Dune::mdgrid::FewSubDomainsTraits<dim,4> > MDGrid;
 
@@ -47,26 +47,22 @@ void check_grid(std::size_t cells_per_dim) {
 
   gridcheck(grid);
 
-  typedef typename MDGrid::template Codim<0>::Entity Entity;
-  typedef typename MDGrid::LeafGridView::template Codim<0>::Iterator Iterator;
-
-  typename MDGrid::LeafGridView gv = grid.leafGridView();
+  auto gv = grid.leafGridView();
 
   grid.startSubDomainMarking();
-  for (Iterator it = gv.template begin<0>(); it != gv.template end<0>(); ++it) {
-    const Entity& e = *it;
-    //IndexSet::SubDomainSet& sds = is.subDomainSet(e);
-    Dune::FieldVector<typename MDGrid::ctype,dim> c = e.geometry().global(Dune::ReferenceElements<typename MDGrid::ctype,dim>::general(e.type()).position(0,0));
+  for (auto&& cell : elements(gv)) {
+    auto geo = cell.geometry();
+    auto c = geo.global(referenceElement(geo).position(0,0));
     double x = c[0];
     double y = dim > 1 ? c[1] : 0.5;
     if (x > 0.2) {
       if (y > 0.3 && y < 0.7) {
         if (x < 0.8)
-          grid.addToSubDomain(1,e);
+          grid.addToSubDomain(1,cell);
         if (x > 0.6)
-          grid.addToSubDomain(0,e);
+          grid.addToSubDomain(0,cell);
       } else {
-        grid.addToSubDomain(0,e);
+        grid.addToSubDomain(0,cell);
       }
     }
   }
