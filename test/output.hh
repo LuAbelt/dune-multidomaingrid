@@ -104,7 +104,7 @@ void printStatus(Grid& grid, std::string prefix, int counter = -1) {
   setup(s,prefix,counter) << "leafGridView";
   vtkOut(grid.leafGridView(),s.str(),grid.leafSubDomainInterfaceBegin(0,1),grid.leafSubDomainInterfaceEnd(0,1));
 
-  for (unsigned int level = 0; level <= grid.maxLevel(); ++level) {
+  for (int level = 0; level <= grid.maxLevel(); ++level) {
     setup(s,prefix,counter) << "levelGridView_" << std::setw(2) << std::setfill('0') << level;
     vtkOut(grid.levelGridView(level),s.str(),grid.levelSubDomainInterfaceBegin(0,1,level),grid.levelSubDomainInterfaceEnd(0,1,level));
   }
