@@ -11,12 +11,12 @@ namespace mdgrid {
 template<typename,typename>
 class IntersectionIteratorWrapper;
 
-template<typename GridImp, PartitionIteratorType pitype>
+template<typename GridImp>
 class LevelGridView
-  : public DefaultLevelGridView<GridImp,pitype>
+  : public DefaultLevelGridView<GridImp>
 {
 
-  using BaseT = DefaultLevelGridView<GridImp,pitype>;
+  using BaseT = DefaultLevelGridView<GridImp>;
 
 public:
 
@@ -48,21 +48,21 @@ public:
 
 };
 
-template<typename GridImp, PartitionIteratorType pitype>
+template<typename GridImp>
 struct LevelGridViewTraits
-  : public DefaultLevelGridViewTraits<GridImp,pitype>
+  : public DefaultLevelGridViewTraits<GridImp>
 {
-  typedef LevelGridView<GridImp,pitype> GridViewImp;
+  typedef LevelGridView<GridImp> GridViewImp;
 };
 
 
 
-template<typename GridImp, PartitionIteratorType pitype>
+template<typename GridImp>
 class LeafGridView
-  : public DefaultLeafGridView<GridImp,pitype>
+  : public DefaultLeafGridView<GridImp>
 {
 
-  typedef DefaultLeafGridView<GridImp,pitype> BaseT;
+  typedef DefaultLeafGridView<GridImp> BaseT;
 
 public:
 
@@ -94,11 +94,11 @@ public:
 
 };
 
-template<typename GridImp, PartitionIteratorType pitype>
+template<typename GridImp>
 struct LeafGridViewTraits
-  : public DefaultLeafGridViewTraits<GridImp,pitype>
+  : public DefaultLeafGridViewTraits<GridImp>
 {
-  typedef LeafGridView<GridImp,pitype> GridViewImp;
+  typedef LeafGridView<GridImp> GridViewImp;
 };
 
 

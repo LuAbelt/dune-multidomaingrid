@@ -147,15 +147,8 @@ public:
     };
 
 
-    template <PartitionIteratorType pitype>
-    struct Partition
-    {
-
-      using LevelGridView = Dune::GridView<LevelGridViewTraits<const Grid,pitype> >;
-
-      using LeafGridView = Dune::GridView<LeafGridViewTraits<const Grid,pitype> >;
-
-    };
+    using LevelGridView = Dune::GridView<LevelGridViewTraits<const Grid> >;
+    using LeafGridView = Dune::GridView<LeafGridViewTraits<const Grid> >;
 
     using LevelIndexSet = IndexSetWrapper<const Grid, typename HostGrid::LevelGridView>;
     using LeafIndexSet  = IndexSetWrapper<const Grid, typename HostGrid::LeafGridView>;
@@ -324,10 +317,10 @@ private:
   template<typename,typename,typename>
   friend class subdomain::IntersectionWrapper;
 
-  template<typename,PartitionIteratorType>
+  template<typename>
   friend class LeafGridView;
 
-  template<typename,PartitionIteratorType>
+  template<typename>
   friend class LevelGridView;
 
   typedef GridDefaultImplementation<HostGrid::dimension,

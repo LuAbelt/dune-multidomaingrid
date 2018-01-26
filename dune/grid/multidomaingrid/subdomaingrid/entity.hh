@@ -30,10 +30,10 @@ class HierarchicIteratorWrapper;
 template<typename MDGrid>
 class SubDomainGrid;
 
-template<typename, PartitionIteratorType>
+template<typename>
 class LevelGridView;
 
-template<typename, PartitionIteratorType>
+template<typename>
 class LeafGridView;
 
 template<typename HostES>
@@ -206,10 +206,10 @@ class EntityWrapper<0,dim,GridImp>
   template<int, int, typename, template<int,int,typename> class>
   friend class Entity;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LevelGridView;
 
-  template<typename, PartitionIteratorType>
+  template<typename>
   friend class LeafGridView;
 
   using Base::multiDomainEntity;
