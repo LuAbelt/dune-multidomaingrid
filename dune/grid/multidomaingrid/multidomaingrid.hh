@@ -475,7 +475,7 @@ public:
   }
 
   //! The current maximum level of the grid.
-  std::size_t maxLevel() const {
+  int maxLevel() const {
     return _hostGrid.maxLevel();
   }
 
@@ -700,7 +700,7 @@ public:
     return _localIdSet;
   }
 
-  const typename Traits::LevelIndexSet& levelIndexSet(unsigned int level) const {
+  const typename Traits::LevelIndexSet& levelIndexSet(int level) const {
     if (!_supportLevelIndexSets) {
       DUNE_THROW(GridError,"level index set support not enabled for this grid");
     }
@@ -866,7 +866,7 @@ public:
   void preUpdateSubDomains() {
     assert(_state == stateMarking && _adaptState == stateFixed);
     if (_supportLevelIndexSets) {
-      for (unsigned int l = 0; l <= maxLevel(); ++l) {
+      for (int l = 0; l <= maxLevel(); ++l) {
         _tmpLevelIndexSets.push_back(std::make_shared<LevelIndexSetImp>(*this,_hostGrid.levelGridView(l)));
       }
     }
@@ -882,7 +882,7 @@ public:
     assert(_state == statePreUpdate && _adaptState == stateFixed);
     _leafIndexSet.swap(*_tmpLeafIndexSet);
     if (_supportLevelIndexSets) {
-      for (unsigned int l = 0; l <= maxLevel(); ++l) {
+      for (int l = 0; l <= maxLevel(); ++l) {
         _levelIndexSets[l]->swap(*_tmpLevelIndexSets[l]);
       }
     }
@@ -1039,11 +1039,11 @@ private:
   void updateIndexSets() {
     // make sure we have enough LevelIndexSets
     if (_supportLevelIndexSets) {
-      while (_levelIndexSets.size() <= maxLevel()) {
+      while (static_cast<int>(_levelIndexSets.size()) <= maxLevel()) {
         _levelIndexSets.push_back(std::make_shared<LevelIndexSetImp>(*this,_hostGrid.levelGridView(_levelIndexSets.size())));
       }
       // and make sure we don't have too many...
-      if (_levelIndexSets.size() > maxLevel() + 1)
+      if (static_cast<int>(_levelIndexSets.size()) > maxLevel() + 1)
         {
           _levelIndexSets.resize(maxLevel() + 1);
         }
