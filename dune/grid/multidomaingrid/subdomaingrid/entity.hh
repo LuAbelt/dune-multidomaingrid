@@ -110,11 +110,6 @@ public:
     return multiDomainEntity().partitionType();
   }
 
-  template<int cc>
-  int DUNE_DEPRECATED_MSG("Use subEntities instead") count() const {
-    return multiDomainEntity().template count<cc>();
-  }
-
   unsigned int subEntities(unsigned int codimSubEntitiy) const {
     return multiDomainEntity().subEntities(codimSubEntitiy);
   }
@@ -215,11 +210,6 @@ public:
 
   // inherit constructors
   using Base::Base;
-
-  template<int cc>
-  int DUNE_DEPRECATED_MSG("Use subEntities instead") count() const {
-    return hostEntity().template count<cc>();
-  }
 
   unsigned int subEntities(unsigned int codim) const {
     return hostEntity().subEntities(codim);

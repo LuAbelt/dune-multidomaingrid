@@ -10,13 +10,13 @@ own right.
 Version
 -------
 
-This is version 2.4.0 of MultiDomainGrid. It is compatible with the 2.4.0
+This is version 2.6.0 of MultiDomainGrid. It is compatible with the 2.6.0
 release of the DUNE core modules. The versioning scheme of MultiDomainGrid
 has recently been synchronized to that of the core modules to make it easier for users
 to find a compatible release for their DUNE distribution.
 
 An overview of changes to the library can be found in the file
-[RELEASE_NOTES.md][13].
+[CHANGELOG.md][13].
 
 
 Features
@@ -59,7 +59,7 @@ API documentation in doc/doxygen/html. Otherwise, you can build this documentati
 yourself by calling "make doc". Note that you need Doxygen and GraphViz available at
 configure time to be able to build the documentation.
 
-If you need help, please ask via [GitHub][1]. If you find bugs, you can also submit
+If you need help, please ask via [DUNE GitLab][1]. If you find bugs, you can also submit
 them to the [bugtracker][3]. Even better, if you have managed to fix a problem, open
 a [pull request][4] to get your patch merged into the library.
 
@@ -81,15 +81,12 @@ Dependencies
 
 dune-multidomaingrid depends on the following software packages:
 
-* [DUNE core libraries][2] (dune-common, dune-geometry, dune-grid) version 2.4.0,
+* [DUNE core libraries][2] (dune-common, dune-geometry, dune-grid) version 2.6.0,
   and their respective dependencies.
 
-* The [dune-typetree][7] library, version 2.4.0.
+* The [dune-typetree][7] library, version 2.6.0.
 
-* MultiDomain's compiler requirements differ slightly from the underlying DUNE
-  libraries: We require at least GCC 4.7 in C++11 mode. MultiDomainGrid should
-  also work with very recent versions of ICC (icpc 14.0.3+) and current
-  clang (3.3+).
+* CMake 3.1.0 and a compiler that is compatible with GCC 5 or newer in C++14 mode.
 
 
 License
@@ -105,7 +102,6 @@ See the file [COPYING.md][9] for full copying permissions.
 Installation
 ------------
 
-Short installation instructions can be found in the file [README.GIT.md][10].
 For a full explanation of the DUNE installation process please read
 the [installation notes][11] or the [build system HOWTO][12].
 
@@ -113,16 +109,15 @@ the [installation notes][11] or the [build system HOWTO][12].
 Links
 -----
 
-[1]:  http://github.com/smuething/dune-multidomaingrid
+[1]:  https://gitlab.dune-project.org/extensions/dune-multidomaingrid
 [2]:  http://dune-project.org
-[3]:  https://github.com/smuething/dune-multidomaingrid/issues
-[4]:  https://github.com/smuething/dune-multidomaingrid/pulls
+[3]:  https://gitlab.dune-project.org/extensions/dune-multidomaingrid/issues
+[4]:  https://gitlab.dune-project.org/extensions/dune-multidomaingrid/merge_requests
 [5]:  http://dune-project.org/pdelab/
 [6]:  http://github.com/smuething/dune-multidomain
 [7]:  http://www.dune-project.org/pdelab/
 [8]:  http://gcc.gnu.org/onlinedocs/libstdc++/faq.html#faq.license
 [9]:  COPYING.md
-[10]: README.GIT.md
 [11]: http://dune-project.org/doc/installation-notes.html
 [12]: http://dune-project.org/doc/buildsystem/buildsystem.pdf
-[13]: RELEASES_NOTES.md
+[13]: CHANGELOG.md

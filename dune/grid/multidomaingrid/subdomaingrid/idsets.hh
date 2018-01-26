@@ -23,7 +23,7 @@ class IdSetWrapper :
   template<typename>
   friend class SubDomainGrid;
 
-  using HostGrid     = typename std::remove_const_t<GridImp>::HostGridType;
+  using HostGrid     = typename std::remove_const_t<GridImp>::HostGrid;
   using Codim0Entity = typename std::remove_const_t<GridImp>::Traits::template Codim<0>::Entity;
 
 public:

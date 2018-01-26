@@ -108,11 +108,6 @@ public:
     return _hostEntity.partitionType();
   }
 
-  template<int cc>
-  int DUNE_DEPRECATED_MSG("Use subEntities instead") count() const {
-    return _hostEntity.template count<cc>();
-  }
-
   unsigned int subEntities(unsigned int codimSubEntitiy) const {
     return _hostEntity.subEntities(codimSubEntitiy);
   }
@@ -188,11 +183,6 @@ public:
   // inherit constructors
   using Base::Base;
 
-  template<int cc>
-  int DUNE_DEPRECATED_MSG("Use subEntities instead") count() const {
-    return hostEntity().template count<cc>();
-  }
-
   unsigned int subEntities(unsigned int codim) const {
     return hostEntity().subEntities(codim);
   }
@@ -233,7 +223,7 @@ public:
   LevelIntersectionIterator ilevelbegin() const {
     return IntersectionIteratorWrapper<
       GridImp,
-      typename GridImp::HostGridType::LevelGridView::IntersectionIterator
+      typename GridImp::HostGrid::LevelGridView::IntersectionIterator
       >(
         hostEntity().ilevelbegin()
         );
@@ -242,7 +232,7 @@ public:
   LevelIntersectionIterator ilevelend() const {
     return IntersectionIteratorWrapper<
       GridImp,
-      typename GridImp::HostGridType::LevelGridView::IntersectionIterator
+      typename GridImp::HostGrid::LevelGridView::IntersectionIterator
       >(
         hostEntity().ilevelend()
         );
@@ -251,7 +241,7 @@ public:
   LeafIntersectionIterator ileafbegin() const {
     return IntersectionIteratorWrapper<
       GridImp,
-      typename GridImp::HostGridType::LeafGridView::IntersectionIterator
+      typename GridImp::HostGrid::LeafGridView::IntersectionIterator
       >(
         hostEntity().ileafbegin()
         );
@@ -260,7 +250,7 @@ public:
   LeafIntersectionIterator ileafend() const {
     return IntersectionIteratorWrapper<
       GridImp,
-      typename GridImp::HostGridType::LeafGridView::IntersectionIterator
+      typename GridImp::HostGrid::LeafGridView::IntersectionIterator
       >(
         hostEntity().ileafend()
         );
