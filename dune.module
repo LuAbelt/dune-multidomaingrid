@@ -3,8 +3,8 @@
 
 #Name of the module
 Module: dune-multidomaingrid
-Version: 2.6.0
+Version: 2.7-git
 Maintainer: steffen.muething@iwr.uni-heidelberg.de
 #depending on
-Depends: dune-grid (>= 2.6) dune-typetree (>= 2.6)
+Depends: dune-grid (>= 2.7) dune-typetree (>= 2.7)
 Whitespace-Hook: Yes

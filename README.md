@@ -10,7 +10,7 @@ own right.
 Version
 -------
 
-This is version 2.6.0 of MultiDomainGrid. It is compatible with the 2.6.0
+This is version 2.7-git of MultiDomainGrid. It is compatible with the 2.7-git
 release of the DUNE core modules. The versioning scheme of MultiDomainGrid
 has recently been synchronized to that of the core modules to make it easier for users
 to find a compatible release for their DUNE distribution.
@@ -81,10 +81,10 @@ Dependencies
 
 dune-multidomaingrid depends on the following software packages:
 
-* [DUNE core libraries][2] (dune-common, dune-geometry, dune-grid) version 2.6.0,
+* [DUNE core libraries][2] (dune-common, dune-geometry, dune-grid) version 2.7-git,
   and their respective dependencies.
 
-* The [dune-typetree][7] library, version 2.6.0.
+* The [dune-typetree][7] library, version 2.7-git.
 
 * CMake 3.1.0 and a compiler that is compatible with GCC 5 or newer in C++14 mode.
 
