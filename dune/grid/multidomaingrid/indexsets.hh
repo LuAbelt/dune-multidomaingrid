@@ -9,6 +9,7 @@
 #include <memory>
 #include <type_traits>
 #include <tuple>
+#include <utility>
 
 
 #include <dune/geometry/typeindex.hh>
@@ -37,7 +38,7 @@ struct _buildMap;
 
 //! \internal template meta program for assembling the per-codim map vector
 template<template<int> class StructForCodim, std::size_t... codim>
-struct _buildMap<StructForCodim,TypeTree::index_pack<codim...> > {
+struct _buildMap<StructForCodim,std::index_sequence<codim...> > {
 
   typedef std::tuple<StructForCodim<codim>... > type;
 
@@ -48,7 +49,7 @@ struct buildMap {
 
   typedef typename _buildMap<
     StructForCodim,
-    decltype(TypeTree::index_range<dimension+1>())
+    decltype(std::make_index_sequence<dimension+1>())
     >::type type;
 
 };
