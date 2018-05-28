@@ -13,6 +13,9 @@ problem, open a [merge request][4] to get your patch merged into the library.
 Changes
 -------
 
+### MultiDomainGrid 2.7
+
+
 ### MultiDomainGrid 2.6
 
 * Bump build toolchain requirements to GCC 5 and CMake 3.1.0.
