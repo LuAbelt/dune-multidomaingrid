@@ -980,13 +980,13 @@ public:
   template<typename EntityType>
   static const typename HostEntity<EntityType>::type& hostEntity(const EntityType& e)
   {
-    return MultiDomainGrid::getRealImplementation(e).hostEntity();
+    return e.impl().hostEntity();
   }
 
   template<typename EntityType>
   static const typename MultiDomainEntity<EntityType>::type& multiDomainEntity(const EntityType& e)
   {
-    return SubDomainGrid::getRealImplementation(e).multiDomainEntity();
+    return e.impl().multiDomainEntity();
   }
 
   template<typename IntersectionType>
@@ -1101,8 +1101,7 @@ private:
 
   template<typename GridView, typename HostGridView>
   static typename GridView::IntersectionIterator multiDomainIntersectionIterator(typename HostGridView::IntersectionIterator iit) {
-    //return typename std::remove_reference<decltype(MultiDomainGrid::getRealImplementation(*((GridView::IntersectionIterator*)nullptr)))>::type(iit);
-    typedef decltype(MultiDomainGrid::getRealImplementation(*static_cast<typename GridView::IntersectionIterator*>(nullptr))) Implementation;
+    typedef decltype(std::declval<typename GridView::IntersectionIterator>().impl()) Implementation;
     return Implementation(iit);
   }
 

@@ -32,7 +32,7 @@ public:
       const GridImp,
       typename GridImp::HostGrid::LevelGridView::IntersectionIterator
       >(
-        this->grid().hostGrid().levelGridView(entity.level()).ibegin(GridImp::getRealImplementation(entity).hostEntity())
+        this->grid().hostGrid().levelGridView(entity.level()).ibegin(entity.impl().hostEntity())
         );
   }
 
@@ -42,7 +42,7 @@ public:
       const GridImp,
       typename GridImp::HostGrid::LevelGridView::IntersectionIterator
       >(
-        this->grid().hostGrid().levelGridView(entity.level()).iend(GridImp::getRealImplementation(entity).hostEntity())
+        this->grid().hostGrid().levelGridView(entity.level()).iend(entity.impl().hostEntity())
         );
   }
 
@@ -78,7 +78,7 @@ public:
       const GridImp,
       typename GridImp::HostGrid::LeafGridView::IntersectionIterator
       >(
-        this->grid().hostGrid().leafGridView().ibegin(GridImp::getRealImplementation(entity).hostEntity())
+        this->grid().hostGrid().leafGridView().ibegin(entity.impl().hostEntity())
         );
   }
 
@@ -88,7 +88,7 @@ public:
       const GridImp,
       typename GridImp::HostGrid::LeafGridView::IntersectionIterator
       >(
-        this->grid().hostGrid().leafGridView().iend(GridImp::getRealImplementation(entity).hostEntity())
+        this->grid().hostGrid().leafGridView().iend(entity.impl().hostEntity())
         );
   }
 

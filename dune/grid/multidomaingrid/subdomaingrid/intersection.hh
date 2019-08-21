@@ -62,7 +62,7 @@ private:
     ::ImplementationType
     ::HostIntersection&
   hostIntersection() const {
-    return GridImp::MultiDomainGrid::getRealImplementation(_multiDomainIntersection).hostIntersection();
+    return _multiDomainIntersection.impl().hostIntersection();
   }
 
 
