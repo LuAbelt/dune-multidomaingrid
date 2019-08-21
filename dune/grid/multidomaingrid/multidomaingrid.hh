@@ -777,7 +777,7 @@ public:
                     int level) const
   {
     DataHandleWrapper<CommDataHandleIF<DataHandleImp,DataTypeImp> > datahandle(data,*this);
-    _hostGrid.levelGridView(level).communicate(datahandle,iftype,dir,level);
+    _hostGrid.levelGridView(level).communicate(datahandle,iftype,dir);
   }
 
   template<typename DataHandleImp, typename DataTypeImp>
