@@ -777,7 +777,7 @@ public:
                     int level) const
   {
     DataHandleWrapper<CommDataHandleIF<DataHandleImp,DataTypeImp> > datahandle(data,*this);
-    _hostGrid.communicate(datahandle,iftype,dir,level);
+    _hostGrid.levelGridView(level).communicate(datahandle,iftype,dir,level);
   }
 
   template<typename DataHandleImp, typename DataTypeImp>
@@ -786,7 +786,7 @@ public:
                     CommunicationDirection dir) const
   {
     DataHandleWrapper<CommDataHandleIF<DataHandleImp,DataTypeImp> > datahandle(data,*this);
-    _hostGrid.communicate(datahandle,iftype,dir);
+    _hostGrid.leafGridView().communicate(datahandle,iftype,dir);
   }
 
   template<typename DataHandle>
