@@ -881,12 +881,12 @@ private:
   template<int codim, typename SizeContainer, typename MultiIndexContainer>
   void updateMapEntry(MapEntry<codim>& me, SizeContainer& sizes, std::vector<MultiIndexContainer>& multiIndexMap) {
     switch (me.domains.state()) {
-    case SubDomainSet::emptySet:
+    case MapEntry<codim>::SubDomainSet::emptySet:
       break;
-    case SubDomainSet::simpleSet:
+    case MapEntry<codim>::SubDomainSet::simpleSet:
       me.index = sizes[*me.domains.begin()]++;
       break;
-    case SubDomainSet::multipleSet:
+    case MapEntry<codim>::SubDomainSet::multipleSet:
       me.index = multiIndexMap.size();
       multiIndexMap.push_back(MultiIndexContainer());
       MultiIndexContainer& mic = multiIndexMap.back();
