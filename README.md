@@ -115,9 +115,9 @@ Links
 [4]:  https://gitlab.dune-project.org/extensions/dune-multidomaingrid/merge_requests
 [5]:  http://dune-project.org/pdelab/
 [6]:  http://github.com/smuething/dune-multidomain
-[7]:  http://www.dune-project.org/pdelab/
+[7]:  https://dune-project.org/modules/dune-pdelab/
 [8]:  http://gcc.gnu.org/onlinedocs/libstdc++/faq.html#faq.license
 [9]:  COPYING.md
-[11]: http://dune-project.org/doc/installation-notes.html
-[12]: http://dune-project.org/doc/buildsystem/buildsystem.pdf
+[11]: https://dune-project.org/doc/installation/
+[12]: https://dune-project.org/buildsystem/
 [13]: CHANGELOG.md
