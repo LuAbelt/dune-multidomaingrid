@@ -27,7 +27,7 @@ public:
     return codim == _codim;
   }
 
-  bool fixedsize(int dim, int codim) const
+  bool fixedSize(int dim, int codim) const
   {
     return true;
   }

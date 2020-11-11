@@ -733,9 +733,9 @@ private:
       return _impl.contains(dim,codim); // TODO: check if codim supported
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
-      //_impl.fixedsize(dim,codim); // TODO: warning if true?
+      //_impl.fixedSize(dim,codim); // TODO: warning if true?
       return false;
     }
 

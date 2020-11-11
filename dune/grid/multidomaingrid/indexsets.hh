@@ -983,9 +983,9 @@ private:
     typedef typename MapEntry<0>::SubDomainSet SubDomainSet;
     typedef typename SubDomainSet::DataHandle DataHandle;
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
-      return DataHandle::fixedsize(dim,codim);
+      return DataHandle::fixedSize(dim,codim);
     }
 
     template<typename Entity>
