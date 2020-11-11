@@ -181,7 +181,7 @@ public:
 
 };
 
-namespace {
+namespace Impl {
 
   template<typename Grid, typename SI, bool max_subdomain_index_is_static>
   struct MaxSubDomainIndexProvider
@@ -231,7 +231,7 @@ class MultiDomainGrid
                                        MDGridTraitsType
                                        >
                                      >,
-    public MaxSubDomainIndexProvider<MultiDomainGrid<
+    public Impl::MaxSubDomainIndexProvider<MultiDomainGrid<
                                        HostGrid_,
                                        MDGridTraitsType
                                        >,
@@ -1133,9 +1133,9 @@ private:
       return _impl.contains(dim,codim); // TODO: check if codim supported
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
-      return _impl.fixedsize(dim,codim);
+      return _impl.fixedSize(dim,codim);
     }
 
     template<typename Entity>
@@ -1189,7 +1189,7 @@ private:
         || _wrappedDataHandle.contains(dim,codim);
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
       return false;
     }
@@ -1262,7 +1262,7 @@ private:
       return false;
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
       return true;
     }
