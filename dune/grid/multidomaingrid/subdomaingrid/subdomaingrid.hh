@@ -561,7 +561,7 @@ public:
                     int level) const
   {
     DataHandleWrapper<CommDataHandleIF<DataHandleImp,DataTypeImp> > datahandle(data,*this);
-    _grid._hostGrid.communicate(datahandle,iftype,dir,level);
+    _grid._hostGrid.levelGridView(level).communicate(datahandle,iftype,dir);
   }
 
   template<typename DataHandleImp, typename DataTypeImp>
@@ -570,7 +570,7 @@ public:
                     CommunicationDirection dir) const
   {
     DataHandleWrapper<CommDataHandleIF<DataHandleImp,DataTypeImp> > datahandle(data,*this);
-    _grid._hostGrid.communicate(datahandle,iftype,dir);
+    _grid._hostGrid.leafGridView().communicate(datahandle,iftype,dir);
   }
 
   size_t numBoundarySegments() const
