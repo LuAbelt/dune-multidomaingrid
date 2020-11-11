@@ -44,7 +44,7 @@ public:
     , _multiDomainIterator(multiDomainIterator)
   {}
 
-  const typename GridImp::MultiDomainGrid::template ReturnImplementationType<MultiDomainIntersectionIterator>::ImplementationType::HostIntersectionIterator& hostIntersectionIterator() const {
+  const auto& hostIntersectionIterator() const {
     return GridImp::MultiDomainGrid::getRealImplementation(_multiDomainIterator).hostIntersectionIterator();
   }
 
