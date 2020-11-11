@@ -52,7 +52,7 @@ public:
   {
     typedef SubDomainIndex DataType;
 
-    static bool fixedsize(int dim, int codim)
+    static bool fixedSize(int dim, int codim)
     {
       return true;
     }

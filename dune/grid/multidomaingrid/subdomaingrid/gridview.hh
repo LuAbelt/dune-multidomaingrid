@@ -36,7 +36,7 @@ public:
       typename GridImp::MultiDomainGrid::LevelGridView::IntersectionIterator
       >(
         &this->indexSet(),
-        this->grid()._grid.levelGridView(entity.level()).ibegin(GridImp::getRealImplementation(entity).multiDomainEntity())
+        this->grid()._grid.levelGridView(entity.level()).ibegin(entity.impl().multiDomainEntity())
         );
   }
 
@@ -48,7 +48,7 @@ public:
       typename GridImp::MultiDomainGrid::LevelGridView::IntersectionIterator
       >(
         &this->indexSet(),
-        this->grid()._grid.levelGridView(entity.level()).iend(GridImp::getRealImplementation(entity).multiDomainEntity())
+        this->grid()._grid.levelGridView(entity.level()).iend(entity.impl().multiDomainEntity())
         );
   }
 
@@ -86,7 +86,7 @@ public:
       typename GridImp::MultiDomainGrid::LeafGridView::IntersectionIterator
       >(
         &this->indexSet(),
-        this->grid()._grid.leafGridView().ibegin(GridImp::getRealImplementation(entity).multiDomainEntity())
+        this->grid()._grid.leafGridView().ibegin(entity.impl().multiDomainEntity())
         );
   }
 
@@ -98,7 +98,7 @@ public:
       typename GridImp::MultiDomainGrid::LeafGridView::IntersectionIterator
       >(
         &this->indexSet(),
-        this->grid()._grid.leafGridView().iend(GridImp::getRealImplementation(entity).multiDomainEntity())
+        this->grid()._grid.leafGridView().iend(entity.impl().multiDomainEntity())
         );
   }
 

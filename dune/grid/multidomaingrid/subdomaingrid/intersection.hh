@@ -56,13 +56,9 @@ class IntersectionWrapper {
 
 private:
 
-  const typename GridImp
-    ::MultiDomainGrid
-    ::template ReturnImplementationType<MultiDomainIntersection>
-    ::ImplementationType
-    ::HostIntersection&
+  const auto&
   hostIntersection() const {
-    return GridImp::MultiDomainGrid::getRealImplementation(_multiDomainIntersection).hostIntersection();
+    return _multiDomainIntersection.impl().hostIntersection();
   }
 
 

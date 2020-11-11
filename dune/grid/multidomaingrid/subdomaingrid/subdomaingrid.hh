@@ -612,12 +612,12 @@ public:
 
   template<typename EntityType>
   static const typename MDGrid::template MultiDomainEntity<EntityType>::type& multiDomainEntity(const EntityType& e) {
-    return SubDomainGrid::getRealImplementation(e).multiDomainEntity();
+    return e.impl().multiDomainEntity();
   }
 
   template<typename EntityType>
   static const typename MDGrid::template HostEntity<EntityType>::type& hostEntity(const EntityType& e) {
-    return SubDomainGrid::getRealImplementation(e).hostEntity();
+    return e.impl().hostEntity();
   }
 
   template<typename IntersectionType>
@@ -628,7 +628,7 @@ public:
 
   template<typename IntersectionType>
   static const typename MultiDomainIntersection<IntersectionType>::Type& multiDomainIntersection(const IntersectionType& is) {
-    return SubDomainGrid::getRealImplementation(is).multiDomainIntersection();
+    return is.impl().multiDomainIntersection();
   }
 
   /*@}*/
@@ -679,7 +679,7 @@ public:
 
   template<typename Intersection>
   IntersectionType intersectionType(const Intersection& intersection) const {
-    return SubDomainGrid::getRealImplementation(intersection).intersectionType();
+    return intersection.impl().intersectionType();
   }
 
 private:
@@ -733,9 +733,9 @@ private:
       return _impl.contains(dim,codim); // TODO: check if codim supported
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
-      //_impl.fixedsize(dim,codim); // TODO: warning if true?
+      //_impl.fixedSize(dim,codim); // TODO: warning if true?
       return false;
     }
 

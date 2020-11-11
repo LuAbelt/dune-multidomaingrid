@@ -181,7 +181,7 @@ public:
 
 };
 
-namespace {
+namespace Impl {
 
   template<typename Grid, typename SI, bool max_subdomain_index_is_static>
   struct MaxSubDomainIndexProvider
@@ -231,7 +231,7 @@ class MultiDomainGrid
                                        MDGridTraitsType
                                        >
                                      >,
-    public MaxSubDomainIndexProvider<MultiDomainGrid<
+    public Impl::MaxSubDomainIndexProvider<MultiDomainGrid<
                                        HostGrid_,
                                        MDGridTraitsType
                                        >,
@@ -980,13 +980,13 @@ public:
   template<typename EntityType>
   static const typename HostEntity<EntityType>::type& hostEntity(const EntityType& e)
   {
-    return MultiDomainGrid::getRealImplementation(e).hostEntity();
+    return e.impl().hostEntity();
   }
 
   template<typename EntityType>
   static const typename MultiDomainEntity<EntityType>::type& multiDomainEntity(const EntityType& e)
   {
-    return SubDomainGrid::getRealImplementation(e).multiDomainEntity();
+    return e.impl().multiDomainEntity();
   }
 
   template<typename IntersectionType>
@@ -1101,8 +1101,7 @@ private:
 
   template<typename GridView, typename HostGridView>
   static typename GridView::IntersectionIterator multiDomainIntersectionIterator(typename HostGridView::IntersectionIterator iit) {
-    //return typename std::remove_reference<decltype(MultiDomainGrid::getRealImplementation(*((GridView::IntersectionIterator*)nullptr)))>::type(iit);
-    typedef decltype(MultiDomainGrid::getRealImplementation(*static_cast<typename GridView::IntersectionIterator*>(nullptr))) Implementation;
+    typedef decltype(std::declval<typename GridView::IntersectionIterator>().impl()) Implementation;
     return Implementation(iit);
   }
 
@@ -1134,9 +1133,9 @@ private:
       return _impl.contains(dim,codim); // TODO: check if codim supported
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
-      return _impl.fixedsize(dim,codim);
+      return _impl.fixedSize(dim,codim);
     }
 
     template<typename Entity>
@@ -1190,7 +1189,7 @@ private:
         || _wrappedDataHandle.contains(dim,codim);
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
       return false;
     }
@@ -1263,7 +1262,7 @@ private:
       return false;
     }
 
-    bool fixedsize(int dim, int codim) const
+    bool fixedSize(int dim, int codim) const
     {
       return true;
     }
