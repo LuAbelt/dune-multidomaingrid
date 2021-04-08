@@ -820,15 +820,16 @@ private:
   void update(LevelIndexSets& levelIndexSets, bool full) {
     const HostIndexSet& his = _hostGridView.indexSet();
     //reset(full);
-    for (typename LevelIndexSets::iterator it = levelIndexSets.begin(); it != levelIndexSets.end(); ++it) {
-      (*it)->reset(full);
+    for (auto& levelIndexSet : levelIndexSets) {
+      levelIndexSet->reset(full);
     }
 
     this->communicateSubDomainSelection();
 
-    typename Containers<0>::IndexMap& im = indexMap<0>();
-    typename Containers<0>::SizeMap& sm = sizeMap<0>();
+    auto& im = indexMap<0>();
+    auto& sm = sizeMap<0>();
     for (const auto& he : elements(_hostGridView)) {
+      // get map entry for host entity
       auto geo = he.geometry();
       auto hgt = geo.type();
       const auto hgt_index = LocalGeometryTypeIndex::index(hgt);
@@ -836,7 +837,10 @@ private:
       MapEntry<0>& me = im[hgt_index][hostIndex];
 
       if (_grid.supportLevelIndexSets()) {
-        levelIndexSets[he.level()]->template indexMap<0>()[hgt_index][levelIndexSets[he.level()]->_hostGridView.indexSet().index(he)].domains.addAll(me.domains);
+        // include subdomain in entity lvl
+        IndexType hostLvlIndex = levelIndexSets[he.level()]->_hostGridView.indexSet().index(he);
+        levelIndexSets[he.level()]->template indexMap<0>()[hgt_index][hostLvlIndex].domains.addAll(me.domains);
+        // propagate subdomain to all ancestors
         markAncestors(levelIndexSets,he,me.domains);
       }
       updateMapEntry(me,sm[hgt_index],multiIndexMap<0>());
@@ -847,8 +851,8 @@ private:
 
     applyToCodims(updateSubIndices(*this));
     applyToCodims(updatePerCodimSizes());
-    for(typename LevelIndexSets::iterator it = levelIndexSets.begin(); it != levelIndexSets.end(); ++it) {
-      (*it)->updateLevelIndexSet();
+    for(auto& levelIndexSet : levelIndexSets) {
+      levelIndexSet->updateLevelIndexSet();
     }
   }
 
@@ -886,11 +890,10 @@ private:
       break;
     case MapEntry<codim>::SubDomainSet::multipleSet:
       me.index = multiIndexMap.size();
-      multiIndexMap.push_back(MultiIndexContainer());
-      MultiIndexContainer& mic = multiIndexMap.back();
-      for (typename SubDomainSet::Iterator it = me.domains.begin(); it != me.domains.end(); ++it) {
-	mic[me.domains.domainOffset(*it)] = sizes[*it]++;
-      }
+      MultiIndexContainer mic;
+      for (const auto& subdomain : me.domains)
+        mic[me.domains.domainOffset(subdomain)] = sizes[subdomain]++;
+      multiIndexMap.push_back(std::move(mic));
     }
   }
 

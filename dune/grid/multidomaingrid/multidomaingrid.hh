@@ -1186,7 +1186,7 @@ private:
       typename WrappedDataHandle::DataType buffer;
     };
 
-    static_assert(sizeof(WrappedDataHandle::DataType) >= sizeof(SubDomainIndex),
+    static_assert(sizeof(Data) >= sizeof(SubDomainIndex),
                   "During load balancing, the data type has to be large enough to contain MultiDomaingrid::SubDomainIndex");
 
     bool contains(int dim, int codim) const
@@ -1215,13 +1215,12 @@ private:
       assert(Entity::codimension == 0);
       if (e.partitionType() == Dune::InteriorEntity && _grid.leafGridView().indexSet().contains(e))
         {
-          typedef typename MDGridTraits::template Codim<0>::SubDomainSet SubDomainSet;
-          const SubDomainSet& subDomains = _grid.leafGridView().indexSet().subDomains(e);
+          const auto& subDomains = _grid.leafGridView().indexSet().subDomains(e);
           Data size = { subDomains.size() };
           buf.write(size.buffer);
-          for (typename SubDomainSet::const_iterator it = subDomains.begin(); it != subDomains.end(); ++it)
+          for (auto& sub_domain : subDomains)
             {
-              Data subDomain = { *it };
+              Data subDomain = { sub_domain };
               buf.write(subDomain.buffer);
             }
         }
@@ -1239,7 +1238,7 @@ private:
             {
               Data subDomain = { 0 };
               buf.read(subDomain.buffer);
-              _grid._loadBalanceStateMap[_grid.globalIdSet().id(e)].add(subDomain.data);
+              _grid._loadBalanceStateMap[_grid.globalIdSet().id(multiDomainEntity(e))].add(subDomain.data);
             }
           _wrappedDataHandle.scatter(buf,e,n - (subDomains.data + 1));
         }
@@ -1247,12 +1246,12 @@ private:
         _wrappedDataHandle.scatter(buf,e,n);
     }
 
-    LoadBalancingDataHandle(const MultiDomainGrid& grid, WrappedDataHandle& wrappedDataHandle)
+    LoadBalancingDataHandle(MultiDomainGrid& grid, WrappedDataHandle& wrappedDataHandle)
       : _grid(grid)
       , _wrappedDataHandle(wrappedDataHandle)
     {}
 
-    const MultiDomainGrid& _grid;
+    MultiDomainGrid& _grid;
     WrappedDataHandle& _wrappedDataHandle;
 
   };
