@@ -456,6 +456,7 @@ public:
       DUNE_THROW(GridError,"level index set support not enabled for this grid");
     }
     assert(level <= maxLevel());
+    assert(_levelIndexSets[level]);
     return *_levelIndexSets[level];
   }
 
