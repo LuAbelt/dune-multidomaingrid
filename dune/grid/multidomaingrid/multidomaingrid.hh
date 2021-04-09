@@ -937,7 +937,6 @@ public:
     std::shared_ptr<SubDomainGrid>& subGridPointer = _subDomainGrids[subDomain];
     if (!subGridPointer) {
       subGridPointer.reset(new SubDomainGrid(const_cast<MultiDomainGrid&>(*this),subDomain));
-      // subGridPointer->update();
     }
     return *subGridPointer;
   }
@@ -947,7 +946,6 @@ public:
     std::shared_ptr<SubDomainGrid>& subGridPointer = _subDomainGrids[subDomain];
     if (!subGridPointer) {
       subGridPointer.reset(new SubDomainGrid(*this,subDomain));
-      // subGridPointer->update();
     }
     return *subGridPointer;
   }
@@ -1052,6 +1050,10 @@ private:
 
     _globalIdSet.update(_hostGrid.globalIdSet());
     _localIdSet.update(_hostGrid.localIdSet());
+
+    // rebuild level index sets on subgrids
+    for (auto& subGridPair : _subDomainGrids)
+      subGridPair.second->update();
   }
 
   void saveMultiDomainState() {
