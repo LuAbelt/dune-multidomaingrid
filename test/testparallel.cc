@@ -13,6 +13,10 @@
 #include <algorithm>
 #include <iterator>
 
+#if HAVE_UG
+#include <dune/grid/uggrid.hh>
+#endif
+
 template<typename GV, typename DataVector>
 class RankTransfer
   : public Dune::CommDataHandleIF<RankTransfer<GV,DataVector>,
@@ -209,6 +213,22 @@ int main(int argc, char** argv)
       HostGrid hostgrid(h,s,p,overlap);
 
       testGrid(hostgrid,"YaspGrid_2",mpihelper);
+    }
+
+    {
+#if HAVE_UG
+      typedef Dune::UGGrid<2> HostGrid;
+      Dune::FieldVector<double,2> lower_left(0.0);
+      Dune::FieldVector<double,2> upper_right(1.0);
+      std::array<unsigned int,2> n = {{uint(N),uint(N)}};
+      auto gridPtr = Dune::StructuredGridFactory<HostGrid>::createCubeGrid(
+        lower_left,
+        upper_right,
+        n
+        );
+      gridPtr->loadBalance();
+      testGrid(*gridPtr,"UGGrid_2",mpihelper);
+#endif
     }
   }
   catch (Dune::Exception & e) {

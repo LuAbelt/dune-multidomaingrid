@@ -32,6 +32,11 @@ namespace Capabilities {
     static const bool v = hasEntity<HostGrid,codim>::v;
   };
 
+  template<class HostGrid, typename MDGridTraits, int codim>
+  struct hasEntityIterator<MultiDomainGrid<HostGrid,MDGridTraits>, codim>
+  {
+    static const bool v = hasEntityIterator<HostGrid,codim>::v;
+  };
 
   template<class HostGrid, typename MDGridTraits, int codim>
   struct canCommunicate<MultiDomainGrid<HostGrid,MDGridTraits>, codim>
@@ -103,6 +108,11 @@ namespace Capabilities {
     static const bool v = hasEntity<MDGrid,codim>::v;
   };
 
+  template<class MDGrid, int codim>
+  struct hasEntityIterator<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid>, codim>
+  {
+    static const bool v = hasEntityIterator<MDGrid,codim>::v;
+  };
 
   template<class MDGrid, int codim>
   struct canCommunicate<Dune::mdgrid::subdomain::SubDomainGrid<MDGrid>, codim>
