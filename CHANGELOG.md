@@ -17,6 +17,8 @@ Changes
 
 * Fix bug where lelve index sets where not updated after grid adaptation.
 
+* Add entity iterator capabilities
+
 ### MultiDomainGrid 2.7
 
 
