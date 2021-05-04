@@ -13,6 +13,10 @@ problem, open a [merge request][4] to get your patch merged into the library.
 Changes
 -------
 
+### Unreleased
+
+* Fix bug where lelve index sets where not updated after grid adaptation.
+
 ### MultiDomainGrid 2.7
 
 

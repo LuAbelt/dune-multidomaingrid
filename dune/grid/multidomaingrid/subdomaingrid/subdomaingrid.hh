@@ -456,6 +456,7 @@ public:
       DUNE_THROW(GridError,"level index set support not enabled for this grid");
     }
     assert(level <= maxLevel());
+    assert(_levelIndexSets[level]);
     return *_levelIndexSets[level];
   }
 
@@ -590,7 +591,7 @@ public:
     return _subDomain;
   }
 
-  void update() const {
+  void update() {
     if (_grid.supportLevelIndexSets()) {
       while (_levelIndexSets.size() <= static_cast<std::size_t>(maxLevel())) {
         _levelIndexSets.push_back(std::make_shared<LevelIndexSetImp>(*this,_grid.levelIndexSet(_levelIndexSets.size())));
@@ -689,7 +690,7 @@ private:
   GlobalIdSetImp _globalIdSet;
   LocalIdSetImp _localIdSet;
   LeafIndexSetImp _leafIndexSet;
-  mutable std::vector<std::shared_ptr<LevelIndexSetImp> > _levelIndexSets;
+  std::vector<std::shared_ptr<LevelIndexSetImp> > _levelIndexSets;
 
   SubDomainGrid(MDGrid& grid, SubDomainIndex subDomain) :
     _grid(grid),
