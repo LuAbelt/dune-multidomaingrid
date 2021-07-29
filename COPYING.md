@@ -7,8 +7,9 @@ Copyright holders
 
  Time Frame | Name
 ------------|---------------------------------
- 2013--2014 | Christoph Grüninger
- 2009--2017 | Steffen Müthing
+ 2013--2015 | Christoph Grüninger
+ 2009--2018 | Steffen Müthing
+ 2020--2021 | Santiago Ospina De Los Rios
  2010       | Oliver Sander
 
 
