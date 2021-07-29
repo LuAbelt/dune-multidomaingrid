@@ -45,8 +45,8 @@ int main(int argc, char** argv)
     SDGrid::LeafGridView::Codim<0>::Iterator it = sdgv.begin<0>();
     SDGrid::LeafGridView::IntersectionIterator iit = sdgv.ibegin(*it);
 
-    MDGrid::LeafGridView::Intersection is1 DUNE_UNUSED = sdgrid.multiDomainIntersection(*iit);
-    MDGrid::LeafGridView::Intersection is2 DUNE_UNUSED = mdgrid.multiDomainIntersection(*iit);
+    MDGrid::LeafGridView::Intersection is1 [[maybe_unused]] = sdgrid.multiDomainIntersection(*iit);
+    MDGrid::LeafGridView::Intersection is2 [[maybe_unused]] = mdgrid.multiDomainIntersection(*iit);
 
     assert(is1.geometry().center() == is2.geometry().center());
 
