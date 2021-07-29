@@ -15,9 +15,13 @@ Changes
 
 ### Unreleased
 
-* Fix bug where lelve index sets where not updated after grid adaptation.
+* Fix bug where level index sets where not updated after grid adaptation.
 
-* Add entity iterator capabilities
+* Add entity iterator capabilities.
+
+* Compatiblity with DUNE 2.8.0.
+
+* Remove dune-typetree dependency.
 
 ### MultiDomainGrid 2.7
 

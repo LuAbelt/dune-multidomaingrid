@@ -84,8 +84,6 @@ dune-multidomaingrid depends on the following software packages:
 * [DUNE core libraries][2] (dune-common, dune-geometry, dune-grid) version 2.7-git,
   and their respective dependencies.
 
-* The [dune-typetree][7] library, version 2.7-git.
-
 * CMake 3.1.0 and a compiler that is compatible with GCC 5 or newer in C++14 mode.
 
 

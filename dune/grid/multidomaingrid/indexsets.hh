@@ -11,15 +11,15 @@
 #include <tuple>
 #include <utility>
 
+#include <dune/common/hybridutilities.hh>
 
 #include <dune/geometry/typeindex.hh>
+
 #include <dune/grid/common/exceptions.hh>
 #include <dune/grid/common/indexidset.hh>
 
 #include <dune/grid/multidomaingrid/utility.hh>
 #include <dune/grid/multidomaingrid/subdomaingrid/indexsets.hh>
-
-#include <dune/typetree/utility.hh>
 
 namespace Dune {
 
@@ -729,20 +729,18 @@ private:
 
   template<typename Functor>
   void applyToCodims(Functor func) const {
-    TypeTree::apply_to_tuple(
-      _containers,
-      func,
-      TypeTree::apply_to_tuple_policy::pass_index()
-      );
+    // static loop over container tuple
+    Hybrid::forEach(Dune::range(std::tuple_size<ContainerMap>{}),
+      [&](auto i){func(i, std::get<i>(_containers));}
+    );
   }
 
   template<typename Functor>
   void applyToCodims(Functor func) {
-    TypeTree::apply_to_tuple(
-      _containers,
-      func,
-      TypeTree::apply_to_tuple_policy::pass_index()
-      );
+    // static loop over container tuple
+    Hybrid::forEach(Dune::range(std::tuple_size<ContainerMap>{}),
+      [&](auto i){func(i, std::get<i>(_containers));}
+    );
   }
 
   template<typename Impl>
