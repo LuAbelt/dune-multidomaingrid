@@ -3,8 +3,8 @@
 
 #Name of the module
 Module: dune-multidomaingrid
-Version: 2.7-git
-Maintainer: steffen.muething@iwr.uni-heidelberg.de
+Version: 2.8-git
+Maintainer: santiago.ospina@iwr.uni-heidelberg.de
 #depending on
-Depends: dune-grid (>= 2.7)
+Depends: dune-grid (>= 2.8)
 Whitespace-Hook: Yes
