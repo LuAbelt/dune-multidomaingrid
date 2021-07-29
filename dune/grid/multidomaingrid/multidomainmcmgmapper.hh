@@ -28,8 +28,7 @@ namespace {
 
     typedef typename GV::IndexSet::IndexType IndexType;
 
-    MCMGMapperStorageProvider(const GV& gv)
-    {}
+    void update(const GV& gv) {}
 
     std::array<std::vector<IndexType>,GV::Grid::maxSubDomainIndex()> _offsets; // provide a map with all geometry types
 
@@ -43,9 +42,9 @@ namespace {
 
     typedef typename GV::IndexSet::IndexType IndexType;
 
-    MCMGMapperStorageProvider(const GV& gv)
-      : _offsets(gv.grid().maxSubDomainIndex())
-    {}
+    void update(const GV& gv) {
+      _offsets.resize(gv.grid().maxSubDomainIndex());
+    }
 
     std::vector<std::vector<IndexType> > _offsets; // provide a map with all geometry types
 
@@ -99,12 +98,10 @@ public:
   typedef typename GV::IndexSet::IndexType IndexType;
   typedef typename GV::Grid::SubDomainIndex SubDomainIndex;
 
-  MultiDomainMCMGMapper (const GV& gridView, const MCMGLayout& layout)
-    : Base(gridView,layout)
-    , StorageProvider(gridView)
-    , _gv(gridView)
+  MultiDomainMCMGMapper (const GV& gv, const MCMGLayout& layout)
+    : Base(gv,layout)
   {
-    update();
+    update(gv);
   }
 
   /** @brief Construct mapper from grid and one of its index sets.
@@ -113,13 +110,13 @@ public:
       \param indexset IndexSet object returned by grid.
 
   */
-  MultiDomainMCMGMapper (const GV& gridView)
-    : Base(gridView)
-    , StorageProvider(gridView)
-    , _gv(gridView)
+  MultiDomainMCMGMapper (const GV& gv)
+    : Base(gv)
   {
-    update();
+    update(gv);
   }
+
+  using Base::gridView;
 
   /** @brief Map entity to array index.
 
@@ -129,7 +126,7 @@ public:
   template<class EntityType>
   int map (SubDomainIndex subDomain, const EntityType& e) const
   {
-    return _gv.indexSet().index(subDomain,e) + _offsets[subDomain][GlobalGeometryTypeIndex::index(e.type())];
+    return gridView().indexSet().index(subDomain,e) + _offsets[subDomain][GlobalGeometryTypeIndex::index(e.type())];
   }
 
   /** @brief Map subentity of codim 0 entity to array index.
@@ -141,8 +138,11 @@ public:
   */
   int map (SubDomainIndex subDomain, const typename GV::template Codim<0>::Entity& e, int i, unsigned int codim) const
   {
-    GeometryType gt = ReferenceElements<double,GV::dimension>::general(e.type()).type(i,codim);
-    return _gv.indexSet().subIndex(subDomain,e,i,codim) + _offsets[subDomain][GlobalGeometryTypeIndex::index(gt)];
+    GeometryType gt =
+        ReferenceElements<double, GV::dimension>::general(e.type()).type(i,
+                                                                         codim);
+    return gridView().indexSet().subIndex(subDomain, e, i, codim) +
+           _offsets[subDomain][GlobalGeometryTypeIndex::index(gt)];
   }
 
   /** @brief Return total number of entities in the entity set managed by the mapper.
@@ -167,11 +167,11 @@ public:
   template<class EntityType>
   bool contains (SubDomainIndex subDomain, const EntityType& e, IndexType& result) const
   {
-    if(!_gv.indexSet().contains(subDomain,e) || !Base::layout()(e.type(),GV::dimension))
-      {
-        result = 0;
-        return false;
-      }
+    if (!gridView().indexSet().contains(subDomain, e) ||
+        !Base::layout()(e.type(), GV::dimension)) {
+      result = 0;
+      return false;
+    }
     result = map(subDomain,e);
     return true;
   }
@@ -188,22 +188,35 @@ public:
   {
     GeometryType gt = ReferenceElements<double,GV::dimension>::general(e.type()).type(i,cc);
     // if the entity is contained in the subdomain, all of its subentities are contained as well
-    if(!_gv.indexSet().contains(subDomain,e) || !Base::layout()(gt,GV::dimension))
-      {
-        result = 0;
-        return false;
-      }
-    result = _gv.indexSet().subIndex(subDomain,e,i,cc) + _offsets[subDomain][GlobalGeometryTypeIndex::index(gt)];
+    if (!gridView().indexSet().contains(subDomain, e) ||
+        !Base::layout()(gt, GV::dimension)) {
+      result = 0;
+      return false;
+    }
+    result = gridView().indexSet().subIndex(subDomain, e, i, cc) +
+             _offsets[subDomain][GlobalGeometryTypeIndex::index(gt)];
     return true;
   }
 
-
-  /** @brief Recalculates map after mesh adaptation
+  /** @brief Recalculates indices after grid adaptation
    */
-  void update()
+  [[deprecated("Use update(gridView) instead! Will be removed after release 2.8.")]]
+  void update ()
   {
-    static_cast<Base*>(this)->update();
-    for (SubDomainIndex subDomain = 0; subDomain < _gv.grid().maxSubDomainIndex(); ++subDomain) {
+    update(gridView());
+  }
+
+  /** @brief Recalculates indices after grid adaptation
+   *
+   * After grid adaptation you need to call this to update
+   * the stored gridview and recalculate the indices.
+   */
+  void update(const GV& gv)
+  {
+    static_cast<Base*>(this)->update(gv);
+    StorageProvider::update(gv);
+    for (SubDomainIndex subDomain = 0;
+         subDomain < gridView().grid().maxSubDomainIndex(); ++subDomain) {
       std::vector<IndexType>& offsets = _offsets[subDomain];
       offsets.resize(GlobalGeometryTypeIndex::size(GV::dimension) + 1);
       std::fill(offsets.begin(),offsets.end(),0);
@@ -212,17 +225,15 @@ public:
       // Note that mapper becomes invalid when the grid is modified.
       for (int cc = 0; cc <= GV::dimension; ++cc)
         {
-          for (auto gt : _gv.indexSet().types(subDomain,cc))
-            offsets[GlobalGeometryTypeIndex::index(gt) + 1] = _gv.indexSet().size(subDomain,gt);
+          for (auto gt : gridView().indexSet().types(subDomain,cc))
+            offsets[GlobalGeometryTypeIndex::index(gt) + 1] =
+                gridView().indexSet().size(subDomain, gt);
           // convert sizes to offset
           // last entry stores total size
           std::partial_sum(offsets.begin(),offsets.end(),offsets.begin());
         }
     }
   }
-
-private:
-  GV _gv;
 };
 
 /** @} */

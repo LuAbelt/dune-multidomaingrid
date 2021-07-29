@@ -621,14 +621,11 @@ public:
     return e.impl().hostEntity();
   }
 
-  template<typename IntersectionType>
-  struct MultiDomainIntersection
-  {
-    typedef typename BaseT::template ReturnImplementationType<IntersectionType>::ImplementationType::MultiDomainIntersection Type;
-  };
+  static const auto& multiDomainIntersection(const typename Traits::LeafIntersection& is) {
+    return is.impl().multiDomainIntersection();
+  }
 
-  template<typename IntersectionType>
-  static const typename MultiDomainIntersection<IntersectionType>::Type& multiDomainIntersection(const IntersectionType& is) {
+  static const auto& multiDomainIntersection(const typename Traits::LevelIntersection& is) {
     return is.impl().multiDomainIntersection();
   }
 

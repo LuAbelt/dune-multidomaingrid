@@ -988,7 +988,7 @@ public:
   }
 
   template<typename IntersectionType>
-  static const typename SubDomainGrid::template MultiDomainIntersection<IntersectionType>::Type& multiDomainIntersection(const IntersectionType& is) {
+  static const auto& multiDomainIntersection(const IntersectionType& is) {
     return SubDomainGrid::multiDomainIntersection(is);
   }
  /*@}*/

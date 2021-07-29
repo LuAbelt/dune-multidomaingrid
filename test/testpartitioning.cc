@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     grid.postUpdateSubDomains();
 
     Grid::SubDomainGrid::LeafGridView::Codim<0>::Entity se0(*grid.subDomain(0).leafGridView().begin<0>());
-    const auto& e0 DUNE_UNUSED = grid.subDomain(0).multiDomainEntity(se0);
+    const auto& e0 [[maybe_unused]] = grid.subDomain(0).multiDomainEntity(se0);
 
     printStatus(grid,"partitioning1");
 
