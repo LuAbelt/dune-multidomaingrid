@@ -45,16 +45,16 @@ dune_add_test(
   CMD_ARGS 3
   )
 
-dune_add_test(SOURCES multidomain-leveliterator-bug)
-dune_add_test(SOURCES testadaptation)
-dune_add_test(SOURCES testintersectionconversion)
-dune_add_test(SOURCES testintersectiongeometrytypes)
-dune_add_test(SOURCES testlargedomainnumbers)
+dune_add_test(SOURCES multidomain-leveliterator-bug.cc)
+dune_add_test(SOURCES testadaptation.cc)
+dune_add_test(SOURCES testintersectionconversion.cc)
+dune_add_test(SOURCES testintersectiongeometrytypes.cc)
+dune_add_test(SOURCES testlargedomainnumbers.cc)
 dune_add_test(
-  SOURCES testparallel
+  SOURCES testparallel.cc
   MPI_RANKS 2
   TIMEOUT 10
   CMD_ARGS 16 2
   )
 
-dune_add_test(SOURCES testpartitioning)
+dune_add_test(SOURCES testpartitioning.cc)
