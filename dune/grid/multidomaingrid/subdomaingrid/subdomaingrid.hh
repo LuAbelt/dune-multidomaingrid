@@ -611,8 +611,20 @@ public:
     return EntityWrapper<EntityType::codimension,dimension,const GridImp>(this,mdEntity);
   }
 
-  template<typename EntityType>
-  static const typename MDGrid::template MultiDomainEntity<EntityType>::type& multiDomainEntity(const EntityType& e) {
+  //! specialization for -parent- multidomain entity
+  template <
+      class EntityType,
+      std::enable_if_t<std::is_same_v<typename MDGrid::Traits::template Codim<EntityType::codimension>::Entity,EntityType>, int> = 0>
+  static const EntityType&
+  multiDomainEntity(const EntityType &e) {
+    return e;
+  }
+
+  template <
+      class EntityType,
+      std::enable_if_t<!std::is_same_v<typename MDGrid::Traits::template Codim<EntityType::codimension>::Entity,EntityType>,int> = 0>
+  static const typename MDGrid::Traits::template Codim<EntityType::codimension>::Entity &
+  multiDomainEntity(const EntityType &e) {
     return e.impl().multiDomainEntity();
   }
 
