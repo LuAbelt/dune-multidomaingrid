@@ -69,7 +69,7 @@ public:
 
   template<typename Entity>
   IndexType index(const Entity& e) const {
-    return index<Entity::codimension>(e);
+    return _mdIndexSet.template index<Entity::codimension>(_grid.domain(),_grid.multiDomainEntity(e));
   }
 
   template<int codim, typename Entity>
