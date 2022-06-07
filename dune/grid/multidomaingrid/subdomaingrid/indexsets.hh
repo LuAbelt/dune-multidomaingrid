@@ -72,9 +72,9 @@ public:
     return _mdIndexSet.template index<Entity::codimension>(_grid.domain(),_grid.multiDomainEntity(e));
   }
 
-  template<int codim, typename Entity>
-  IndexType subIndex(const Entity& e, int i) const {
-    return _mdIndexSet.subIndex(_grid.domain(),_grid.multiDomainEntity(e),i,codim);
+  template<int cc, typename Entity>
+  IndexType subIndex(const Entity& e, int i, unsigned int codim) const {
+    return _mdIndexSet.template subIndex<cc>(_grid.domain(),_grid.multiDomainEntity(e),i,codim);
   }
 
   template<typename Entity>
