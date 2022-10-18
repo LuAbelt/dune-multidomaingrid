@@ -31,12 +31,13 @@ public:
 
 private:
 
-  typedef FieldVector<ctype,coorddimension> GlobalCoords;
-  typedef FieldVector<ctype,mydimension> LocalCoords;
   typedef typename GridImp::HostGrid::Traits::template Codim<dimension-mydim>::LocalGeometry HostLocalGeometry; //TODO: fix this
 
 public:
 
+  typedef typename HostLocalGeometry::GlobalCoordinate GlobalCoordinate;
+  typedef typename HostLocalGeometry::LocalCoordinate LocalCoordinate;
+  typedef typename HostLocalGeometry::Volume Volume;
   typedef typename HostLocalGeometry::JacobianInverseTransposed JacobianInverseTransposed;
   typedef typename HostLocalGeometry::JacobianTransposed JacobianTransposed;
   typedef typename HostLocalGeometry::JacobianInverse JacobianInverse;
@@ -54,48 +55,48 @@ public:
     return _wrappedLocalGeometry.affine();
   }
 
-  GlobalCoords corner(int i) const {
+  GlobalCoordinate corner(int i) const {
     return _wrappedLocalGeometry.corner(i);
   }
 
-  GlobalCoords global(const LocalCoords& local) const {
+  GlobalCoordinate global(const LocalCoordinate& local) const {
     return _wrappedLocalGeometry.global(local);
   }
 
-  LocalCoords local(const GlobalCoords& global) const {
+  LocalCoordinate local(const GlobalCoordinate& global) const {
     return _wrappedLocalGeometry.local(global);
   }
 
-  bool checkInside(const LocalCoords& local) const {
+  bool checkInside(const LocalCoordinate& local) const {
     return _wrappedLocalGeometry.checkInside(local);
   }
 
-  ctype integrationElement(const LocalCoords& local) const {
+  Volume integrationElement(const LocalCoordinate& local) const {
     return _wrappedLocalGeometry.integrationElement(local);
   }
 
-  ctype volume() const {
+  Volume volume() const {
     return _wrappedLocalGeometry.volume();
   }
 
-  GlobalCoords center() const {
+  GlobalCoordinate center() const {
     return _wrappedLocalGeometry.center();
   }
 
-  JacobianTransposed jacobianTransposed(const LocalCoords& local) const {
+  JacobianTransposed jacobianTransposed(const LocalCoordinate& local) const {
     return _wrappedLocalGeometry.jacobianTransposed(local);
   }
 
-  JacobianInverseTransposed jacobianInverseTransposed(const LocalCoords& local) const {
+  JacobianInverseTransposed jacobianInverseTransposed(const LocalCoordinate& local) const {
     return _wrappedLocalGeometry.jacobianInverseTransposed(local);
   }
 
-  Jacobian jacobian(const LocalCoords& local) const
+  Jacobian jacobian(const LocalCoordinate& local) const
   {
     return _wrappedLocalGeometry.jacobian(local);
   }
 
-  JacobianInverse jacobianInverse(const LocalCoords& local) const
+  JacobianInverse jacobianInverse(const LocalCoordinate& local) const
   {
     return _wrappedLocalGeometry.jacobianInverse(local);
   }
