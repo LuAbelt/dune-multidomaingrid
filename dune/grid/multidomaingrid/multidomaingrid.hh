@@ -169,7 +169,11 @@ public:
       typename HostGrid::Traits::LocalIdSet::IdType
       >;
 
-    using CollectiveCommunication = typename HostGrid::CollectiveCommunication;
+    using CollectiveCommunication
+    [[deprecated("Use CommunicationType. Will be removed after release 2.9")]]
+    = typename HostGrid::CollectiveCommunication;
+
+    using Communication = typename HostGrid::Communication;
 
     using LeafSubDomainInterfaceIterator  = Dune::mdgrid::LeafSubDomainInterfaceIterator<const Grid>;
     using LevelSubDomainInterfaceIterator = Dune::mdgrid::LevelSubDomainInterfaceIterator<const Grid>;
@@ -766,7 +770,7 @@ public:
     return _hostGrid.ghostSize(codim);
   }
 
-  const typename Traits::CollectiveCommunication& comm() const {
+  const typename Traits::Communication& comm() const {
     return _hostGrid.comm();
   }
 
