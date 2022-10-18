@@ -124,7 +124,7 @@ public:
 
   bool equals(const EntityWrapperBase& other) const
   {
-    return grid() == other.grid() && multiDomainEntity() == other.multiDomainEntity();
+    return _grid == other._grid && multiDomainEntity() == other.multiDomainEntity();
   }
 
 private:
