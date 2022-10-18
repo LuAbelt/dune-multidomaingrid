@@ -7,4 +7,5 @@ Version: 2.8-git
 Maintainer: santiago.ospina@iwr.uni-heidelberg.de
 #depending on
 Depends: dune-grid (>= 2.8)
+Suggests: dune-uggrid
 Whitespace-Hook: Yes

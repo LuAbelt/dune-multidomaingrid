@@ -4,6 +4,8 @@
 #include <dune/common/parallel/communication.hh>
 #include <dune/grid/multidomaingrid/multidomaingrid.hh>
 #include <dune/grid/multidomaingrid/multidomainmcmgmapper.hh>
+#include <dune/grid/multidomaingrid/factory.hh>
+#include <dune/grid/multidomaingrid/gmshreader.hh>
 
 namespace Dune {
 

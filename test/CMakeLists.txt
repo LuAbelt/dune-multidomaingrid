@@ -58,3 +58,9 @@ dune_add_test(
   )
 
 dune_add_test(SOURCES testpartitioning.cc)
+
+dune_add_test(
+  SOURCES testgmshreader.cc
+  CMD_ARGS "${CMAKE_CURRENT_SOURCE_DIR}/example.msh" 3
+  CMAKE_GUARD dune-uggrid_FOUND
+)
