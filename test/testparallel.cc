@@ -45,7 +45,7 @@ public:
   template<typename MessageBufferImp, typename Entity>
   void gather(MessageBufferImp& buf, const Entity& e) const
   {
-    buf.write(Dune::MPIHelper::getCollectiveCommunication().rank());
+    buf.write(Dune::MPIHelper::getCommunication().rank());
   }
 
   template<typename MessageBufferImp, typename Entity>

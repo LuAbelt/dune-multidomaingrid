@@ -189,7 +189,11 @@ public:
       typename MDGrid::HostGrid::Traits::LocalIdSet::IdType
       >;
 
-    using CollectiveCommunication = typename MDGrid::CollectiveCommunication;
+    using CollectiveCommunication
+    [[deprecated("Use Communication. Will be removed after release 2.9")]]
+    = typename MDGrid::CollectiveCommunication;
+
+    using Communication = typename MDGrid::Communication;
   };
 
 };
@@ -551,7 +555,7 @@ public:
     return _grid.ghostSize(codim);
   }
 
-  const typename Traits::CollectiveCommunication& comm() const {
+  const typename Traits::Communication& comm() const {
     return _grid.comm();
   }
 
