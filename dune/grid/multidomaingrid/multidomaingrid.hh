@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 
+#include <dune/common/shared_ptr.hh>
+
 #include <dune/grid/common/grid.hh>
 
 #include <dune/grid/multidomaingrid/hostgridaccessor.hh>
@@ -429,10 +431,11 @@ public:
    * \param hostGrid                the host grid that will be wrapped by the MultiDomainGrid
    * \param supportLevelIndexSets   flag indicating support for level index sets on subdomains
    */
-  explicit MultiDomainGrid(HostGrid& hostGrid, bool supportLevelIndexSets = true) :
-    _hostGrid(hostGrid),
+  explicit MultiDomainGrid(const std::shared_ptr<HostGrid>& hostGrid, bool supportLevelIndexSets = true) :
+    _hostGridPtr(hostGrid),
+    _hostGrid(*_hostGridPtr),
     _traits(),
-    _leafIndexSet(*this,hostGrid.leafGridView()),
+    _leafIndexSet(*this,_hostGrid.leafGridView()),
     _globalIdSet(*this),
     _localIdSet(*this),
     _state(stateFixed),
@@ -450,10 +453,11 @@ public:
    * \param traits                  an instance of the grid traits, which might contain runtime information
    * \param supportLevelIndexSets   flag indicating support for level index sets on subdomains
    */
-  explicit MultiDomainGrid(HostGrid& hostGrid, const MDGridTraitsType& traits, bool supportLevelIndexSets = true) :
-    _hostGrid(hostGrid),
+  explicit MultiDomainGrid(const std::shared_ptr<HostGrid>& hostGrid, const MDGridTraitsType& traits, bool supportLevelIndexSets = true) :
+    _hostGridPtr(hostGrid),
+    _hostGrid(*_hostGridPtr),
     _traits(traits),
-    _leafIndexSet(*this,hostGrid.leafGridView()),
+    _leafIndexSet(*this,_hostGrid.leafGridView()),
     _globalIdSet(*this),
     _localIdSet(*this),
     _state(stateFixed),
@@ -463,6 +467,30 @@ public:
   {
     updateIndexSets();
   }
+
+
+  /** @name Constructors */
+  /*@{*/
+  //! Constructs a new MultiDomainGrid from the given host grid.
+  /**
+   *
+   * \param hostGrid                the host grid that will be wrapped by the MultiDomainGrid
+   * \param supportLevelIndexSets   flag indicating support for level index sets on subdomains
+   */
+  explicit MultiDomainGrid(HostGrid& hostGrid, bool supportLevelIndexSets = true)
+    : MultiDomainGrid(stackobject_to_shared_ptr(hostGrid), supportLevelIndexSets)
+  {}
+
+  //! Constructs a new MultiDomainGrid from the given host grid.
+  /**
+   *
+   * \param hostGrid                the host grid that will be wrapped by the MultiDomainGrid
+   * \param traits                  an instance of the grid traits, which might contain runtime information
+   * \param supportLevelIndexSets   flag indicating support for level index sets on subdomains
+   */
+  explicit MultiDomainGrid(HostGrid& hostGrid, const MDGridTraitsType& traits, bool supportLevelIndexSets = true)
+    : MultiDomainGrid{stackobject_to_shared_ptr(hostGrid), traits, supportLevelIndexSets}
+  {}
 
   /*@}*/
 
@@ -1014,6 +1042,7 @@ private:
     return _hostGrid;
   }
 
+  std::shared_ptr<HostGrid> _hostGridPtr;
   HostGrid& _hostGrid;
   const MDGridTraitsType _traits;
 
