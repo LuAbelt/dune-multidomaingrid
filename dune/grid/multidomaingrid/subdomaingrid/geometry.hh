@@ -40,6 +40,8 @@ public:
 
   typedef typename HostGeometry::JacobianInverseTransposed JacobianInverseTransposed;
   typedef typename HostGeometry::JacobianTransposed JacobianTransposed;
+  typedef typename HostGeometry::JacobianInverse JacobianInverse;
+  typedef typename HostGeometry::Jacobian Jacobian;
 
   GeometryType type() const {
     return _hostGeometry.type();
@@ -81,15 +83,24 @@ public:
     return _hostGeometry.center();
   }
 
-  const JacobianTransposed
-  jacobianTransposed(const LocalCoords& local) const {
+  JacobianTransposed jacobianTransposed(const LocalCoords& local) const {
     return _hostGeometry.jacobianTransposed(local);
   }
 
-  const JacobianInverseTransposed
-  jacobianInverseTransposed(const LocalCoords& local) const {
+  JacobianInverseTransposed jacobianInverseTransposed(const LocalCoords& local) const {
     return _hostGeometry.jacobianInverseTransposed(local);
   }
+
+  Jacobian jacobian(const LocalCoords& local) const
+  {
+    return _hostGeometry.jacobian(local);
+  }
+
+  JacobianInverse jacobianInverse(const LocalCoords& local) const
+  {
+    return _hostGeometry.jacobianInverse(local);
+  }
+
 
 private:
 
