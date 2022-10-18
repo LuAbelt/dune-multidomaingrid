@@ -610,7 +610,9 @@ public:
   /** @name Entity conversion methods */
   /*@{*/
 
-  template<typename EntityType>
+  template <
+      class EntityType,
+      std::enable_if_t<std::is_same_v<typename MDGrid::Traits::template Codim<EntityType::codimension>::Entity,EntityType>, int> = 0>
   typename Traits::template Codim<EntityType::codimension>::Entity subDomainEntity(const EntityType& mdEntity) const {
     return EntityWrapper<EntityType::codimension,dimension,const GridImp>(this,mdEntity);
   }
