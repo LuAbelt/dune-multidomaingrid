@@ -376,16 +376,15 @@ public:
   }
 
   //! Returns the subdindex of the i-th subentity of e with codimension codim.
-  template<int codim, typename Entity>
-  IndexType subIndex(const Entity& e, int i) const {
-    return _hostGridView.indexSet().subIndex(_grid.hostEntity(e),i,codim);
+  template<int codim>
+  IndexType subIndex(const typename Grid::Traits::template Codim<codim>::Entity& e, int i, unsigned int cd) const {
+    return _hostGridView.indexSet().template subIndex<codim>(_grid.hostEntity(e),i,cd);
   }
 
   //! Returns the subdindex of the i-th subentity of e with codimension codim.
   template<typename Entity>
-  IndexType subIndex(const Entity& e, int i, unsigned int codim) const {
-    IndexType r = _hostGridView.indexSet().subIndex(_grid.hostEntity(e),i,codim);
-    return r;
+  IndexType subIndex(const Entity& e, int i, unsigned int cd) const {
+    return _hostGridView.indexSet().subIndex(_grid.hostEntity(e),i,cd);
   }
 
     //! Returns a list of all geometry types with codimension codim contained in the grid.
@@ -677,13 +676,14 @@ public:
     _hostGridView(hostGridView)
   {}
 
+private:
+
   explicit IndexSetWrapper(const ThisType& rhs) :
     _grid(rhs._grid),
     _hostGridView(rhs._hostGridView),
     _containers(rhs._containers)
     {}
 
-private:
 
   //! Returns the index map for the given codimension.
   //! \tparam cc The requested codimension.
