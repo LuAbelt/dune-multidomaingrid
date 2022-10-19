@@ -12,9 +12,11 @@ class MultiDomainGrid;
 } // namespace mdgrid
 
 // forward declaration
-
 template <class GridType>
 class GridFactoryInterface;
+
+template <class GridType>
+class GridFactory;
 
 template<class HostGrid, class MDGTraits>
 class GridFactory<Dune::mdgrid::MultiDomainGrid<HostGrid, MDGTraits>> : public GridFactoryInterface<Dune::mdgrid::MultiDomainGrid<HostGrid, MDGTraits>> {
