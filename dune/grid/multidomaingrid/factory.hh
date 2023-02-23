@@ -51,7 +51,7 @@ public:
     return std::exchange(_grid_ptr, nullptr);
   }
 
-  void makeGrid(int max_subdomains = 1) {
+  void makeGrid(std::size_t max_subdomains = 1) {
     assert(not _grid_ptr);
 
     std::unique_ptr<MDGTraits> traits;
