@@ -29,15 +29,18 @@ public:
   void read (const std::string& f)
   {
     Dune::GmshReaderParser<HostGrid>::read(f);
-    const auto& index_map = this->elementIndexMap();
-    int max_subdomains = *std::max_element(begin(index_map), end(index_map));
-    _factory.makeGrid(max_subdomains);
+    // list of gmsh domain indices for each entity (gmsh index starts at 1!)
+    const auto& sub_domain_ids = this->elementIndexMap();
+    if (begin(sub_domain_ids) == end(sub_domain_ids)) return;
+    int max_subdomain_id = *std::max_element(begin(sub_domain_ids), end(sub_domain_ids));
+    assert(max_subdomain_id > 0);
+    _factory.makeGrid(max_subdomain_id - 1);
     auto& grid = _factory.grid();
 
     grid.startSubDomainMarking();
     unsigned int i = 0;
     for (const auto& cell : elements(grid.leafGridView())) {
-      auto subdomain = index_map[i] - 1; // gmsh index starts at 1!
+      auto subdomain = sub_domain_ids[i] - 1;
       grid.addToSubDomain(subdomain, cell), i++;
     }
 
