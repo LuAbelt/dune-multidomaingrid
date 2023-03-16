@@ -5,7 +5,9 @@ install(FILES
   allsubdomaininterfacesiterator.hh
   arraybasedset.hh
   entity.hh
+  factory.hh
   geometry.hh
+  gmshreader.hh
   gridview.hh
   hierarchiciterator.hh
   hostgridaccessor.hh
