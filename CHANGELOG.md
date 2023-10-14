@@ -21,7 +21,7 @@ Changes
 
 * Add entity iterator capabilities.
 
-* Compatiblity with DUNE 2.8.0.
+* Compatibility with DUNE 2.8.0.
 
 * Remove dune-typetree dependency.
 
@@ -41,7 +41,7 @@ Changes
 
 * Bump compiler requirements to GCC 4.7.
 
-* Compatiblity with DUNE 2.4.0.
+* Compatibility with DUNE 2.4.0.
 
 * New implementation of per-codim data containers on top of std::tuple.
 
