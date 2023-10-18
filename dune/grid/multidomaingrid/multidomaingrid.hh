@@ -661,7 +661,7 @@ public:
    *
    * The iterator will only traverse the host grid once for visiting all subdomain interfaces.
    * Incrementing the iterator might thus result in an iterator pointing to the same grid
-   * intersection, but to a different pair of subdomains. The subdomains pointed to by ther
+   * intersection, but to a different pair of subdomains. The subdomains pointed to by the
    * iterator can be retrieved by calling LeafAllSubDomainInterfacesIterator::subDomain1()
    * and LeafAllSubDomainInterfacesIterator::subDomain2(), respectively.
    */
@@ -685,7 +685,7 @@ public:
    *
    * The iterator will only traverse the host grid once for visiting all subdomain interfaces.
    * Incrementing the iterator might thus result in an iterator pointing to the same grid
-   * intersection, but to a different pair of subdomains. The subdomains pointed to by ther
+   * intersection, but to a different pair of subdomains. The subdomains pointed to by the
    * iterator can be retrieved by calling LevelAllSubDomainInterfacesIterator::subDomain1()
    * and LevelAllSubDomainInterfacesIterator::subDomain2(), respectively.
    *

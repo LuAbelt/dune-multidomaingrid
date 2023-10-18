@@ -234,7 +234,7 @@ public:
 
   /*@}*/
 
-  /** @name Stardard Dune Intersection interface methods */
+  /** @name Standard Dune Intersection interface methods */
   /*@{*/
 
   //! Returns the  entity of the corresponding cell in the first subdomain.
